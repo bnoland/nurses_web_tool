@@ -1,50 +1,114 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
+library(shinyBS)
 
-# Define UI for application that draws a histogram
+# User interface ------------------------------------------------------------------------------
+
 ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Old Faithful Geyser Data"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
-      
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+    titlePanel("Nurses web tool"),
+    
+    sidebarLayout(
+        sidebarPanel(
+            # Hack to force the slider input widget to only put tick marks at integer values.
+            tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
+            
+            bsCollapse(
+                # Year range selection.
+                bsCollapsePanel(
+                    title = "Year range",
+                    sliderInput(
+                        inputId = "year_range",
+                        label = NULL,
+                        # TODO: The year range should be extracted from the data.
+                        min = 2011, max = 2017,
+                        value = c(min, max),
+                        sep = ""
+                    )
+                ),
+                
+                # Gender selection.
+                bsCollapsePanel(
+                    title = "Gender",
+                    checkboxGroupInput(
+                        inputId = "gender_selection",
+                        label = NULL,
+                        choices = list(
+                            "Male" = 1,
+                            "Female" = 2
+                        ),
+                        selected = 1:2
+                    )
+                ),
+                
+                # Age group selection.
+                bsCollapsePanel(
+                    title = "Age group"
+                ),
+                
+                # Race selection.
+                bsCollapsePanel(
+                    title = "Race",
+                    checkboxGroupInput(
+                        inputId = "race_selection",
+                        label = NULL,
+                        choices = list(
+                            "White" = 1,
+                            "Black" = 2,
+                            "Hispanic" = 3,
+                            "Asian" = 4,
+                            "Native American" = 5,
+                            "Hawaiian/Pacific Islander" = 6,
+                            "Other" = 7
+                        ),
+                        selected = 1:7
+                    )
+                ),
+                
+                # Education level selection.
+                bsCollapsePanel(
+                    title = "Level of education",
+                    checkboxGroupInput(
+                        inputId = "educ_selection",
+                        label = NULL,
+                        choices = list(
+                            "No high school" = 1,
+                            "Completed high school" = 2,
+                            "Some college" = 3,
+                            "Associate degree" = 4,
+                            "Bachelor's degree" = 5,
+                            "Graduate degree" = 6
+                        ),
+                        selected = 1:6
+                    )
+                ),
+                
+                # Immigrant status selection.
+                bsCollapsePanel(
+                    title = "Immigrant status"
+                )
+            )
+        ),
+        
+        mainPanel(
+            tabsetPanel(
+                type = "tabs",
+                tabPanel(
+                    title = "Plot 1",
+                    fluidRow(
+                        column(12, "Here is a plot"),
+                        column(12, "Here is more stuff")
+                    )
+                ),
+                tabPanel("Plot 2", "Second plot")
+            )
+        )
+    )
 )
 
-# Define server logic required to draw a histogram
+# Server logic --------------------------------------------------------------------------------
+
 server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+# Set up and run the app ----------------------------------------------------------------------
 
+shinyApp(ui, server)

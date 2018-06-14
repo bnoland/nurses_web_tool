@@ -82,8 +82,14 @@ ui <- fluidPage(
                 ),
                 
                 # Immigrant status selection.
+                # TODO: What are the pertinent CPS variables?
                 bsCollapsePanel(
                     title = "Immigrant status"
+                ),
+                
+                # TODO: How to handle geographic region reasonably?
+                bsCollapsePanel(
+                    title = "Geography"
                 )
             )
         ),

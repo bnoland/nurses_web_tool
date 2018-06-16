@@ -98,13 +98,15 @@ ui <- fluidPage(
             tabsetPanel(
                 type = "tabs",
                 tabPanel(
-                    title = "Plot 1",
-                    fluidRow(
-                        column(12, "Here is a plot"),
-                        column(12, "Here is more stuff")
-                    )
+                    title = "Trends",
+                    "Trend plots."
+                    # fluidRow(
+                    #     column(12, "Here is a plot"),
+                    #     column(12, "Here is more stuff")
+                    # )
                 ),
-                tabPanel("Plot 2", "Second plot")
+                tabPanel("Geography", "Geographic plots."),
+                tabPanel("Download", "Download the data.")
             )
         )
     )

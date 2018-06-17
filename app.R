@@ -1,5 +1,12 @@
 library(shiny)
 library(shinyBS)
+# TODO: Import entire tidyverse?
+library(tidyverse)
+
+# Load the data -------------------------------------------------------------------------------
+
+# TODO: Column specifications?
+nurses <- read_csv("nurses.csv")
 
 # User interface ------------------------------------------------------------------------------
 
@@ -18,8 +25,9 @@ ui <- fluidPage(
                     sliderInput(
                         inputId = "year_range",
                         label = NULL,
-                        # TODO: The year range should be extracted from the data.
-                        min = 2011, max = 2017,
+                        # TODO: Why do min/max need to be doubles for this to work correctly?
+                        min = as.double(min(nurses$year, na.rm = TRUE)),
+                        max = as.double(max(nurses$year, na.rm = TRUE)),
                         value = c(min, max),
                         sep = ""
                     )
@@ -41,10 +49,21 @@ ui <- fluidPage(
                 
                 # Age group selection.
                 bsCollapsePanel(
-                    title = "Age group"
+                    title = "Age group",
+                    checkboxGroupInput(
+                        inputId = "age_selection",
+                        label = NULL,
+                        choices = list(
+                            "16-24" = 1,
+                            "25-54" = 2,
+                            "55 and over" = 3
+                        ),
+                        selected = 1:3
+                    )
                 ),
                 
                 # Race selection.
+                # TODO: Are these the right levels for the race variable?
                 bsCollapsePanel(
                     title = "Race",
                     checkboxGroupInput(
@@ -81,10 +100,19 @@ ui <- fluidPage(
                     )
                 ),
                 
-                # Immigrant status selection.
-                # TODO: What are the pertinent CPS variables?
+                # Citizenship status selection.
                 bsCollapsePanel(
-                    title = "Immigrant status"
+                    title = "Citizenship status",
+                    checkboxGroupInput(
+                        inputId = "citizen_selection",
+                        label = NULL,
+                        choices = list(
+                            "US-born" = 1,
+                            "Foreign-born, non-citizen" = 2,
+                            "Foreign-born, citizen" = 3
+                        ),
+                        selected = 1:3
+                    )
                 ),
                 
                 # TODO: How to handle geographic region reasonably?
@@ -99,11 +127,17 @@ ui <- fluidPage(
                 type = "tabs",
                 tabPanel(
                     title = "Trends",
-                    "Trend plots."
-                    # fluidRow(
-                    #     column(12, "Here is a plot"),
-                    #     column(12, "Here is more stuff")
-                    # )
+                    fluidRow(
+                        # TODO: Make the plots a fixed size?
+                        column(
+                            width = 12,
+                            plotOutput("members_trend")
+                        ),
+                        column(
+                            width = 12,
+                            plotOutput("coverage_trend")
+                        )
+                    )
                 ),
                 tabPanel("Geography", "Geographic plots."),
                 tabPanel("Download", "Download the data.")
@@ -115,8 +149,15 @@ ui <- fluidPage(
 # Server logic --------------------------------------------------------------------------------
 
 server <- function(input, output) {
+    # TODO: Only update plots when the corresponding tab is selected?
+    output$members_trend <- renderPlot({
+        plot(1:10, 1:10)
+    })
+    output$coverage_trend <- renderPlot({
+        plot(1:10, 1:10)
+    })
 }
 
-# Set up and run the app ----------------------------------------------------------------------
+# Run the app ---------------------------------------------------------------------------------
 
 shinyApp(ui, server)

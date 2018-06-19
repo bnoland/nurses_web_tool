@@ -3,22 +3,23 @@ library(shinyBS)
 # TODO: Import entire tidyverse?
 library(tidyverse)
 
+source("factor_levels.R")
+
 # Load the data -------------------------------------------------------------------------------
 
-# TODO: Have factor levels returned by functions (to ease maintainability)?
-# TODO: Right now the thing infers factor levels from the data. Do we want this?
+# TODO: Should I have bothered coding all these variables as factors?? It adds a lot of additional
+# code (for a marginal improvement in readability).
+
 nurses <- read_csv("nurses_preprocessed.csv",
     col_types = cols(
         year = col_integer(),
-        #sex = col_factor(levels = c("Male", "Female")),
-        sex = col_factor(NULL),
+        sex = col_factor(levels = sex_factor_levels()),
         member = col_logical(),
         covered = col_logical(),
         age = col_integer(),
-        #age_group = col_factor(levels = cut(age, breaks = c(0, 16, 25, 55, Inf), right = FALSE))
-        age_group = col_factor(NULL),
-        educ = col_factor(NULL),
-        citizen = col_factor(NULL)
+        age_group = col_factor(age_group_factor_levels()),
+        educ = col_factor(education_factor_levels()),
+        citizen = col_factor(citizenship_factor_levels())
     )
 )
 
@@ -50,68 +51,37 @@ ui <- fluidPage(
                 # Sex selection.
                 bsCollapsePanel(title = "Sex",
                     checkboxGroupInput(inputId = "sex_selection", label = NULL,
-                        choices = list(
-                            "Male",
-                            "Female"
-                        )
-                        #selected = 1:2
-                    )
+                                       choices = sex_factor_levels(),
+                                       selected = sex_factor_levels())
                 ),
                 
                 # Age group selection.
                 bsCollapsePanel(title = "Age group",
                     checkboxGroupInput(inputId = "age_selection", label = NULL,
-                        choices = list(
-                            "16-24",
-                            "25-54",
-                            "55 and over"
-                        )
-                        #selected = 1:3
-                    )
+                                       choices = age_group_factor_levels(),
+                                       selected = age_group_factor_levels())
                 ),
                 
                 # Race selection.
                 # TODO: Are these the right levels for the race variable?
                 bsCollapsePanel(title = "Race",
                     checkboxGroupInput(inputId = "race_selection", label = NULL,
-                        choices = list(
-                            "White" = 1,
-                            "Black" = 2,
-                            "Hispanic" = 3,
-                            "Asian" = 4,
-                            "Native American" = 5,
-                            "Hawaiian/Pacific Islander" = 6,
-                            "Other" = 7
-                        ),
-                        selected = 1:7
-                    )
+                                       choices = race_factor_levels(),
+                                       selected = race_factor_levels())
                 ),
                 
                 # Education level selection.
                 bsCollapsePanel(title = "Level of education",
                     checkboxGroupInput(inputId = "educ_selection", label = NULL,
-                        choices = list(
-                            "No high school",
-                            "Completed high school",
-                            "Some college",
-                            "Associate degree",
-                            "Bachelor's degree",
-                            "Graduate degree"
-                        )
-                        #selected = 1:6
-                    )
+                                       choices = education_factor_levels(),
+                                       selected = education_factor_levels())
                 ),
                 
                 # Citizenship status selection.
                 bsCollapsePanel(title = "Citizenship status",
                     checkboxGroupInput(inputId = "citizen_selection", label = NULL,
-                        choices = list(
-                            "US native",
-                            "Foreign-born, citizen",
-                            "Foreign-born, non-citizen"
-                        )
-                        #selected = 1:3
-                    )
+                                       choices = citizenship_factor_levels(),
+                                       selected = citizenship_factor_levels())
                 ),
                 
                 # TODO: How to handle geographic region reasonably?
@@ -123,11 +93,23 @@ ui <- fluidPage(
             tabsetPanel(
                 type = "tabs",
                 tabPanel(title = "Trends",
+                    # TODO: Make the plots a fixed size?
                     fluidRow(
-                        # TODO: Make the plots a fixed size?
-                        column(width = 12, plotOutput("members_trend")),
-                        column(width = 12, plotOutput("coverage_trend"))
-                    )
+                        column(width = 12,
+                            selectInput(inputId = "trends_group_by", label = "Group by:",
+                                choices = list(
+                                    "None" = 1,
+                                    "Sex" = 2,
+                                    "Age group" = 3,
+                                    "Race" = 4,
+                                    "Level of education" = 5,
+                                    "Citizenship status" = 6
+                                )
+                            )
+                        )
+                    ),
+                    fluidRow(column(width = 12, plotOutput("members_trend")))
+                    #fluidRow(column(width = 12, plotOutput("coverage_trend")))
                 ),
                 tabPanel("Geography", "Geographic plots."),
                 tabPanel("Download", "Download the data.")
@@ -144,10 +126,11 @@ server <- function(input, output) {
             filter(
                 year >= input$year_range[1], year <= input$year_range[2],
                 sex %in% input$sex_selection,
+                age_group %in% input$age_selection,
                 educ %in% input$educ_selection,
                 citizen %in% input$citizen_selection
             ) %>%
-            # TODO: Example of grouping (by sex). Want to extend this functionality.
+            # TODO: Example of grouping. Want to extend this functionality.
             group_by(year, sex) %>%
             summarize(
                 prop_members = mean(member, na.rm = TRUE),

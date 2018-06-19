@@ -5,6 +5,8 @@
 
 library(tidyverse)
 
+source("factor_levels.R")
+
 # Load the raw data ---------------------------------------------------------------------------
 
 # TODO: Column specifications?
@@ -12,12 +14,8 @@ nurses <- read_csv("nurses.csv")
 
 # Do the preprocessing ------------------------------------------------------------------------
 
-# Put the sex code in the right format.
+# Code sex from the appropriate CPS variable.
 sex_code <- function(pesex) {
-    levels <- c(
-        "Male",
-        "Female"
-    )
     pesex %>% map_chr(function(x) {
         if (is.na(x)) {
             NA
@@ -27,19 +25,26 @@ sex_code <- function(pesex) {
             "Female"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = levels)
+    }) %>% factor(levels = sex_factor_levels())
 }
 
-# Put the education level code in the right format.
-education_code <- function(peeduca) {
-    levels <- c(
-        "No high school",
-        "Completed high school",
-        "Some college",
-        "Associate degree",
-        "Bachelor's degree",
-        "Graduate degree"
+# Code age group from age.
+age_group_code <- function(age) {
+    age_group <- cut(age, breaks = c(16, 25, 55, Inf), right = FALSE)
+    fct_recode(age_group,
+       "16-24" = "[16,25)",
+       "25-54" = "[25,55)",
+       "55 and over" = "[55,Inf)"
     )
+}
+
+# Code race from the pertinent CPS variable.
+race_code <- function(ptdrace) {
+    NA
+}
+
+# Code education level from the appropriate CPS variable.
+education_code <- function(peeduca) {
     peeduca %>% map_chr(function(x) {
         if (is.na(x)) {
             NA
@@ -57,16 +62,11 @@ education_code <- function(peeduca) {
             "Graduate degree"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = levels)
+    }) %>% factor(levels = education_factor_levels())
 }
 
-# Put the citizenship status code in the right format.
-citizenship_status_code <- function(prcitshp) {
-    levels <- c(
-        "US native",
-        "Foreign-born, citizen",
-        "Foreign-born, non-citizen"
-    )
+# Code citizenship status from the appropriate CPS variable.
+citizenship_code <- function(prcitshp) {
     prcitshp %>% map_chr(function(x) {
         if (is.na(x)) {
             NA
@@ -78,7 +78,7 @@ citizenship_status_code <- function(prcitshp) {
             "Foreign-born, non-citizen"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = levels)
+    }) %>% factor(levels = citizenship_factor_levels())
 }
 
 nurses_preprocessed <- nurses %>%
@@ -93,15 +93,13 @@ nurses_preprocessed <- nurses %>%
         member = (peernlab == 1),
         covered = (member | peerncov),
         age = ifelse(is.na(peage), prtage, peage),
-        age_group = cut(age, breaks = c(0, 16, 25, 55, Inf), right = FALSE),
-        # TODO: Define race variable.
+        age_group = age_group_code(age),
+        race = race_code(ptdrace),
         educ = education_code(peeduca),
-        citizen = citizenship_status_code(prcitshp)
+        citizen = citizenship_code(prcitshp)
         # TODO: Define geography variable(s).
     ) %>%
     filter(age >= 16)
-
-nurses_preprocessed
 
 # Write the preprocessed data to disk ---------------------------------------------------------
 

@@ -90,10 +90,9 @@ ui <- fluidPage(
         ),
         
         mainPanel(
-            tabsetPanel(
-                type = "tabs",
+            tabsetPanel(type = "tabs",
                 tabPanel(title = "Trends",
-                    # TODO: Make the plots a fixed size?
+                    br(),
                     fluidRow(
                         column(width = 12,
                             selectInput(inputId = "trends_group_by", label = "Group by:",
@@ -108,14 +107,17 @@ ui <- fluidPage(
                             )
                         )
                     ),
+                    # TODO: Make the plots a fixed size?
                     fluidRow(
                         column(width = 12,
-                               plotOutput("members_trend")
+                            h3("Membership proportion"),
+                            plotOutput("members_trend")
                         )
                     ),
                     fluidRow(
                         column(width = 12,
-                               plotOutput("coverage_trend")
+                            h3("Coverage proportion"),
+                            plotOutput("coverage_trend")
                         )
                     )
                 ),
@@ -129,6 +131,7 @@ ui <- fluidPage(
 # Server logic --------------------------------------------------------------------------------
 
 # Plot union membership or union contract coverage over time.
+# TODO: Plot axis labels, etc. + plot styling.
 trend_plot <- function(input, output, type) {
     nurses_subset <- nurses %>%
         filter(

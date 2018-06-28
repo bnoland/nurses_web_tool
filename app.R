@@ -108,8 +108,16 @@ ui <- fluidPage(
                             )
                         )
                     ),
-                    fluidRow(column(width = 12, plotOutput("members_trend")))
-                    #fluidRow(column(width = 12, plotOutput("coverage_trend")))
+                    fluidRow(
+                        column(width = 12,
+                               plotOutput("members_trend")
+                        )
+                    ),
+                    fluidRow(
+                        column(width = 12,
+                               plotOutput("coverage_trend")
+                        )
+                    )
                 ),
                 tabPanel("Geography", "Geographic plots."),
                 tabPanel("Download", "Download the data.")
@@ -120,43 +128,57 @@ ui <- fluidPage(
 
 # Server logic --------------------------------------------------------------------------------
 
-server <- function(input, output) {
-    output$members_trend <- renderPlot({
-        nurses_subset <- nurses %>%
-            filter(
-                year >= input$year_range[1], year <= input$year_range[2],
-                sex %in% input$sex_selection,
-                age_group %in% input$age_selection,
-                educ %in% input$educ_selection,
-                citizen %in% input$citizen_selection
-            ) %>%
-            group_by(year)
-        
-        group_var <- as.symbol(input$trends_group_by)
-        if (group_var != "none") {
-            nurses_subset <- nurses_subset %>%
-                group_by(.dots = group_var, add = TRUE)
-        }
-        
+# Plot union membership or union contract coverage over time.
+trend_plot <- function(input, output, type) {
+    nurses_subset <- nurses %>%
+        filter(
+            year >= input$year_range[1], year <= input$year_range[2],
+            sex %in% input$sex_selection,
+            age_group %in% input$age_selection,
+            educ %in% input$educ_selection,
+            citizen %in% input$citizen_selection
+        ) %>%
+        group_by(year)
+    
+    group_var <- as.symbol(input$trends_group_by)
+    if (group_var != "none") {
+        nurses_subset <- nurses_subset %>%
+            group_by(.dots = group_var, add = TRUE)
+    }
+    
+    if (type == "membership") {
         nurses_subset <- nurses_subset %>%
             summarize(
-                # TODO: mean(eval(as.name("x")))
-                prop_members = mean(member, na.rm = TRUE),
+                prop = mean(member, na.rm = TRUE),
                 n = n()
             )
-        
-        if (group_var != "none") {
-            p <- ggplot(nurses_subset,
-                        aes_(quote(year), quote(prop_members), color = group_var))
-        } else {
-            p <- ggplot(nurses_subset, aes(year, prop_members))
-        }
-        
-        p + geom_line() + expand_limits(y = 0)
+    } else if (type == "coverage") {
+        nurses_subset <- nurses_subset %>%
+            summarize(
+                prop = mean(covered, na.rm = TRUE),
+                n = n()
+            )
+    } else {
+        # TODO: Put an assertion here.
+    }
+    
+    if (group_var != "none") {
+        p <- ggplot(nurses_subset,
+                    aes_(quote(year), quote(prop), color = group_var))
+    } else {
+        p <- ggplot(nurses_subset, aes(year, prop))
+    }
+    
+    p + geom_line() + expand_limits(y = 0)
+}
+
+server <- function(input, output) {
+    output$members_trend <- renderPlot({
+        trend_plot(input, output, type = "membership")
     })
     
     output$coverage_trend <- renderPlot({
-        #plot(1:10, 1:10)
+        trend_plot(input, output, type = "coverage")
     })
 }
 

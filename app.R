@@ -98,12 +98,12 @@ ui <- fluidPage(
                         column(width = 12,
                             selectInput(inputId = "trends_group_by", label = "Group by:",
                                 choices = list(
-                                    "None" = 1,
-                                    "Sex" = 2,
-                                    "Age group" = 3,
-                                    "Race" = 4,
-                                    "Level of education" = 5,
-                                    "Citizenship status" = 6
+                                    "None" = "none",
+                                    "Sex" = "sex",
+                                    "Age group" = "age_group",
+                                    "Race" = "race",
+                                    "Level of education" = "educ",
+                                    "Citizenship status" = "citizen"
                                 )
                             )
                         )
@@ -130,17 +130,29 @@ server <- function(input, output) {
                 educ %in% input$educ_selection,
                 citizen %in% input$citizen_selection
             ) %>%
-            # TODO: Example of grouping. Want to extend this functionality.
-            group_by(year, sex) %>%
+            group_by(year)
+        
+        group_var <- as.symbol(input$trends_group_by)
+        if (group_var != "none") {
+            nurses_subset <- nurses_subset %>%
+                group_by(.dots = group_var, add = TRUE)
+        }
+        
+        nurses_subset <- nurses_subset %>%
             summarize(
+                # TODO: mean(eval(as.name("x")))
                 prop_members = mean(member, na.rm = TRUE),
                 n = n()
             )
         
-        ggplot(nurses_subset, aes(year, prop_members, color = sex)) +
-            geom_line() +
-            #coord_cartesian(ylim = c(0, NA))
-            expand_limits(y = 0)
+        if (group_var != "none") {
+            p <- ggplot(nurses_subset,
+                        aes_(quote(year), quote(prop_members), color = group_var))
+        } else {
+            p <- ggplot(nurses_subset, aes(year, prop_members))
+        }
+        
+        p + geom_line() + expand_limits(y = 0)
     })
     
     output$coverage_trend <- renderPlot({

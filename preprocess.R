@@ -39,8 +39,24 @@ age_group_code <- function(age) {
 }
 
 # Code race from the pertinent CPS variable.
-race_code <- function(ptdrace) {
-    NA
+race_code <- function(ptdtrace) {
+    ptdtrace %>% map_chr(function(x) {
+        if (is.na(x)) {
+            NA
+        } else if (x == 1) {
+            "White"
+        } else if (x == 2) {
+            "Black"
+        } else if (x == 3) {
+            "American Indian (Alaskan Native)"
+        } else if (x == 4) {
+            "Asian"
+        } else if (x == 5) {
+            "Hawaiian/Pacific Islander"
+        } else {
+            "Other"
+        }
+    }) %>% factor(levels = race_factor_levels())
 }
 
 # Code education level from the appropriate CPS variable.
@@ -91,10 +107,12 @@ nurses_preprocessed <- nurses %>%
         year = year,
         sex = sex_code(pesex),
         member = (peernlab == 1),
-        covered = (member | peerncov),
+        covered = (member | peerncov == 1),
         age = ifelse(is.na(peage), prtage, peage),
         age_group = age_group_code(age),
-        race = race_code(ptdrace),
+        race = race_code(ptdtrace),
+        # NOTE: Hispanic status is independent of race.
+        hisp = (pehspnon == 1),
         educ = education_code(peeduca),
         citizen = citizenship_code(prcitshp)
         # TODO: Define geography variable(s).

@@ -18,6 +18,8 @@ nurses <- read_csv("nurses_preprocessed.csv",
         covered = col_logical(),
         age = col_integer(),
         age_group = col_factor(age_group_factor_levels()),
+        race = col_factor(race_factor_levels()),
+        hisp = col_logical(),
         educ = col_factor(education_factor_levels()),
         citizen = col_factor(citizenship_factor_levels())
     )
@@ -70,6 +72,13 @@ ui <- fluidPage(
                                        selected = race_factor_levels())
                 ),
                 
+                # Hispanic status selection.
+                bsCollapsePanel(title = "Hispanic status",
+                    checkboxGroupInput(inputId = "hisp_status_selection", label = NULL,
+                                       choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
+                                       selected = c(TRUE, FALSE))
+                ),
+                
                 # Education level selection.
                 bsCollapsePanel(title = "Level of education",
                     checkboxGroupInput(inputId = "educ_selection", label = NULL,
@@ -101,6 +110,7 @@ ui <- fluidPage(
                                     "Sex" = "sex",
                                     "Age group" = "age_group",
                                     "Race" = "race",
+                                    "Hispanic status" = "hisp",
                                     "Level of education" = "educ",
                                     "Citizenship status" = "citizen"
                                 )
@@ -138,6 +148,8 @@ trend_plot <- function(input, output, type) {
             year >= input$year_range[1], year <= input$year_range[2],
             sex %in% input$sex_selection,
             age_group %in% input$age_selection,
+            race %in% input$race_selection,
+            hisp %in% input$hisp_status_selection,
             educ %in% input$educ_selection,
             citizen %in% input$citizen_selection
         ) %>%

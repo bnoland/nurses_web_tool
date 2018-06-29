@@ -21,9 +21,8 @@ race_factor_levels <- function() {
     c(
         "White",
         "Black",
-        "Hispanic",
+        "American Indian (Alaskan Native)",
         "Asian",
-        "Native American",
         "Hawaiian/Pacific Islander",
         "Other"
     )

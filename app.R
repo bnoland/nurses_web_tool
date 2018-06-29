@@ -65,7 +65,6 @@ ui <- fluidPage(
                 ),
                 
                 # Race selection.
-                # TODO: Are these the right levels for the race variable?
                 bsCollapsePanel(title = "Race",
                     checkboxGroupInput(inputId = "race_selection", label = NULL,
                                        choices = race_factor_levels(),
@@ -132,6 +131,7 @@ ui <- fluidPage(
                     )
                 ),
                 tabPanel("Geography", "Geographic plots."),
+                tabPanel("Data", dataTableOutput("nurses_subset_table")),
                 tabPanel("Download", "Download the data.")
             )
         )
@@ -140,9 +140,8 @@ ui <- fluidPage(
 
 # Server logic --------------------------------------------------------------------------------
 
-# Plot union membership or union contract coverage over time.
-# TODO: Plot axis labels, etc. + plot styling.
-trend_plot <- function(input, output, type) {
+# Returns the subset of the data set selected by the user (and grouped appropriately).
+nurses_subset_selected <- function(input) {
     nurses_subset <- nurses %>%
         filter(
             year >= input$year_range[1], year <= input$year_range[2],
@@ -161,6 +160,14 @@ trend_plot <- function(input, output, type) {
             group_by(.dots = group_var, add = TRUE)
     }
     
+    nurses_subset
+}
+
+# Plot union membership or union contract coverage over time.
+# TODO: Plot axis labels, etc. + plot styling.
+trend_plot <- function(input, type) {
+    nurses_subset <- nurses_subset_selected(input)
+    
     if (type == "membership") {
         nurses_subset <- nurses_subset %>%
             summarize(
@@ -177,6 +184,7 @@ trend_plot <- function(input, output, type) {
         # TODO: Put an assertion here.
     }
     
+    group_var <- as.symbol(input$trends_group_by)
     if (group_var != "none") {
         p <- ggplot(nurses_subset,
                     aes_(quote(year), quote(prop), color = group_var))
@@ -188,13 +196,17 @@ trend_plot <- function(input, output, type) {
 }
 
 server <- function(input, output) {
+    # TODO: Make subset of nurses a reactive variable to avoid lots of redundant computation.
+    
     output$members_trend <- renderPlot({
-        trend_plot(input, output, type = "membership")
+        trend_plot(input, type = "membership")
     })
     
     output$coverage_trend <- renderPlot({
-        trend_plot(input, output, type = "coverage")
+        trend_plot(input, type = "coverage")
     })
+    
+    output$nurses_subset_table <- renderDataTable(nurses_subset_selected(input))
 }
 
 # Run the app ---------------------------------------------------------------------------------

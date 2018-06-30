@@ -99,40 +99,83 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
+                
+                # Trends panel.
                 tabPanel(title = "Trends",
-                    br(),
-                    fluidRow(
-                        column(width = 12,
-                            selectInput(inputId = "trends_group_by", label = "Group by:",
-                                choices = list(
-                                    "None" = "none",
-                                    "Sex" = "sex",
-                                    "Age group" = "age_group",
-                                    "Race" = "race",
-                                    "Hispanic status" = "hisp",
-                                    "Level of education" = "educ",
-                                    "Citizenship status" = "citizen"
+                    
+                    tabsetPanel(type = "tabs",
+                        
+                        # Panel for viewing trend plots.
+                        tabPanel(title = "Plots",
+                            # TODO: Make the plots a fixed size?
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Membership proportion"),
+                                    plotOutput("members_trend")
+                                )
+                            ),
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Coverage proportion"),
+                                    plotOutput("coverage_trend")
+                                )
+                            )
+                        ),
+                        
+                        # Panel for viewing the data used for generating the trend plots.
+                        tabPanel(title = "Data",
+                            fluidRow(width = 12,
+                                h3("Membership proportion")
+                                # TODO: Data viewer.
+                            ),
+                            fluidRow(width = 12,
+                                h3("Coverage proportion")
+                                # TODO: Data viewer.
+                            )
+                        ),
+                        
+                        # Panel for setting options related to the trend plots.
+                        tabPanel(title = "Options",
+                            br(),
+                            fluidRow(
+                                column(width = 12,
+                                    selectInput(inputId = "trends_group_by", label = "Group by:",
+                                        choices = list(
+                                            "None" = "none",
+                                            "Sex" = "sex",
+                                            "Age group" = "age_group",
+                                            "Race" = "race",
+                                            "Hispanic status" = "hisp",
+                                            "Level of education" = "educ",
+                                            "Citizenship status" = "citizen"
+                                        )
+                                    )
                                 )
                             )
                         )
-                    ),
-                    # TODO: Make the plots a fixed size?
-                    fluidRow(
-                        column(width = 12,
-                            h3("Membership proportion"),
-                            plotOutput("members_trend")
-                        )
-                    ),
-                    fluidRow(
-                        column(width = 12,
-                            h3("Coverage proportion"),
-                            plotOutput("coverage_trend")
-                        )
+                        
                     )
                 ),
-                tabPanel("Geography", "Geographic plots."),
-                tabPanel("Data", dataTableOutput("nurses_subset_table")),
-                tabPanel("Download", "Download the data.")
+                
+                # Geography panel.
+                tabPanel(title = "Geography",
+                    
+                    tabsetPanel(type = "tabs",
+                        
+                        # Panel for viewing chloropleth maps.
+                        tabPanel(title = "Maps"),
+                        
+                        # Panel for viewing the data used to generate the maps.
+                        tabPanel(title = "Data"),
+                        
+                        # Panel for setting options related to the maps.
+                        tabPanel(title = "Options")
+                    )
+                ),
+                
+                # Data viewer panel.
+                tabPanel(title = "Data", dataTableOutput("nurses_subset_table"))
+                #tabPanel("Download", "Download the data.")
             )
         )
     )

@@ -125,12 +125,12 @@ ui <- fluidPage(
                         # Panel for viewing the data used for generating the trend plots.
                         tabPanel(title = "Data",
                             fluidRow(width = 12,
-                                h3("Membership proportion")
-                                # TODO: Data viewer.
+                                h3("Membership proportion"),
+                                dataTableOutput("membership_trend_data")
                             ),
                             fluidRow(width = 12,
-                                h3("Coverage proportion")
-                                # TODO: Data viewer.
+                                h3("Coverage proportion"),
+                                dataTableOutput("coverage_trend_data")
                             )
                         ),
                         
@@ -183,25 +183,24 @@ ui <- fluidPage(
 
 # Server logic --------------------------------------------------------------------------------
 
-# Plot union membership or union contract coverage over time.
-# TODO: Plot axis labels, etc. + plot styling.
-trend_plot <- function(nurses_subset, group_var, type) {
-    nurses_subset <- nurses_subset %>% group_by(year)
+# Return union membership or union contract coverage trend data.
+trend_data <- function(nurses_subset, group_var, type) {
+    nurses_subset_grouped <- nurses_subset %>% group_by(year)
     
     group_var <- as.symbol(group_var)
     if (group_var != "none") {
-        nurses_subset <- nurses_subset %>%
+        nurses_subset_grouped <- nurses_subset_grouped %>%
             group_by(.dots = group_var, add = TRUE)
     }
     
     if (type == "membership") {
-        nurses_subset <- nurses_subset %>%
+        nurses_subset_grouped <- nurses_subset_grouped %>%
             summarize(
                 prop = mean(member, na.rm = TRUE),
                 n = n()
             )
     } else if (type == "coverage") {
-        nurses_subset <- nurses_subset %>%
+        nurses_subset_grouped <- nurses_subset_grouped %>%
             summarize(
                 prop = mean(covered, na.rm = TRUE),
                 n = n()
@@ -210,11 +209,20 @@ trend_plot <- function(nurses_subset, group_var, type) {
         # TODO: Put an assertion here.
     }
     
+    nurses_subset_grouped
+}
+
+# Plot union membership or union contract coverage over time.
+# TODO: Plot axis labels, etc. + plot styling.
+trend_plot <- function(nurses_subset, group_var, type) {
+    nurses_subset_grouped <- trend_data(nurses_subset, group_var, type)
+    
+    group_var <- as.symbol(group_var)
     if (group_var != "none") {
-        p <- ggplot(nurses_subset,
+        p <- ggplot(nurses_subset_grouped,
                     aes_(quote(year), quote(prop), color = group_var))
     } else {
-        p <- ggplot(nurses_subset, aes(year, prop))
+        p <- ggplot(nurses_subset_grouped, aes(year, prop))
     }
     
     p + geom_line() + expand_limits(y = 0)

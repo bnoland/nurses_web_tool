@@ -111,13 +111,13 @@ ui <- fluidPage(
                             fluidRow(
                                 column(width = 12,
                                     h3("Membership proportion"),
-                                    plotOutput("members_trend")
+                                    plotOutput("members_trend_plot")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
                                     h3("Coverage proportion"),
-                                    plotOutput("coverage_trend")
+                                    plotOutput("coverage_trend_plot")
                                 )
                             )
                         ),
@@ -215,14 +215,14 @@ trend_data <- function(nurses_subset, group_var, type) {
 # Plot union membership or union contract coverage over time.
 # TODO: Plot axis labels, etc. + plot styling.
 trend_plot <- function(nurses_subset, group_var, type) {
-    nurses_subset_grouped <- trend_data(nurses_subset, group_var, type)
+    trend_data <- trend_data(nurses_subset, group_var, type)
     
     group_var <- as.symbol(group_var)
     if (group_var != "none") {
-        p <- ggplot(nurses_subset_grouped,
+        p <- ggplot(trend_data,
                     aes_(quote(year), quote(prop), color = group_var))
     } else {
-        p <- ggplot(nurses_subset_grouped, aes(year, prop))
+        p <- ggplot(trend_data, aes(year, prop))
     }
     
     p + geom_line() + expand_limits(y = 0)
@@ -245,17 +245,31 @@ server <- function(input, output) {
     })
     
     # Renders the trend plot for union membership.
-    output$members_trend <- renderPlot({
+    output$members_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
         trend_plot(nurses_subset, group_var, type = "membership")
     })
     
     # Renders the trend plot for union contract coverage.
-    output$coverage_trend <- renderPlot({
+    output$coverage_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
         trend_plot(nurses_subset, group_var, type = "coverage")
+    })
+    
+    # Renders the data table showing the union membership trend data.
+    output$membership_trend_data <- renderDataTable({
+        nurses_subset <- nurses_subset_selected()
+        group_var <- input$trends_group_var
+        trend_data(nurses_subset, group_var, type = "membership")
+    })
+    
+    # Renders the data table showing the union contract coverage data.
+    output$coverage_trend_data <- renderDataTable({
+        nurses_subset <- nurses_subset_selected()
+        group_var <- input$trends_group_var
+        trend_data(nurses_subset, group_var, type = "coverage")
     })
     
     # Renders the data table showing the subset of the nurses data selected by the user.

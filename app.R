@@ -139,7 +139,7 @@ ui <- fluidPage(
                             br(),
                             fluidRow(
                                 column(width = 12,
-                                    selectInput(inputId = "trends_group_by", label = "Group by:",
+                                    selectInput(inputId = "trends_group_var", label = "Group by:",
                                         choices = list(
                                             "None" = "none",
                                             "Sex" = "sex",
@@ -183,33 +183,16 @@ ui <- fluidPage(
 
 # Server logic --------------------------------------------------------------------------------
 
-# Returns the subset of the data set selected by the user (and grouped appropriately).
-nurses_subset_selected <- function(input) {
-    nurses_subset <- nurses %>%
-        filter(
-            year >= input$year_range[1], year <= input$year_range[2],
-            sex %in% input$sex_selection,
-            age_group %in% input$age_selection,
-            race %in% input$race_selection,
-            hisp %in% input$hisp_status_selection,
-            educ %in% input$educ_selection,
-            citizen %in% input$citizen_selection
-        ) %>%
-        group_by(year)
+# Plot union membership or union contract coverage over time.
+# TODO: Plot axis labels, etc. + plot styling.
+trend_plot <- function(nurses_subset, group_var, type) {
+    nurses_subset <- nurses_subset %>% group_by(year)
     
-    group_var <- as.symbol(input$trends_group_by)
+    group_var <- as.symbol(group_var)
     if (group_var != "none") {
         nurses_subset <- nurses_subset %>%
             group_by(.dots = group_var, add = TRUE)
     }
-    
-    nurses_subset
-}
-
-# Plot union membership or union contract coverage over time.
-# TODO: Plot axis labels, etc. + plot styling.
-trend_plot <- function(input, type) {
-    nurses_subset <- nurses_subset_selected(input)
     
     if (type == "membership") {
         nurses_subset <- nurses_subset %>%
@@ -227,7 +210,6 @@ trend_plot <- function(input, type) {
         # TODO: Put an assertion here.
     }
     
-    group_var <- as.symbol(input$trends_group_by)
     if (group_var != "none") {
         p <- ggplot(nurses_subset,
                     aes_(quote(year), quote(prop), color = group_var))
@@ -239,17 +221,37 @@ trend_plot <- function(input, type) {
 }
 
 server <- function(input, output) {
-    # TODO: Make subset of nurses a reactive variable to avoid lots of redundant computation.
     
+    # Returns the subset of the nurses data selected by the user.
+    nurses_subset_selected <- reactive({
+        nurses %>%
+            filter(
+                year >= input$year_range[1], year <= input$year_range[2],
+                sex %in% input$sex_selection,
+                age_group %in% input$age_selection,
+                race %in% input$race_selection,
+                hisp %in% input$hisp_status_selection,
+                educ %in% input$educ_selection,
+                citizen %in% input$citizen_selection
+            )
+    })
+    
+    # Renders the trend plot for union membership.
     output$members_trend <- renderPlot({
-        trend_plot(input, type = "membership")
+        nurses_subset <- nurses_subset_selected()
+        group_var <- input$trends_group_var
+        trend_plot(nurses_subset, group_var, type = "membership")
     })
     
+    # Renders the trend plot for union contract coverage.
     output$coverage_trend <- renderPlot({
-        trend_plot(input, type = "coverage")
+        nurses_subset <- nurses_subset_selected()
+        group_var <- input$trends_group_var
+        trend_plot(nurses_subset, group_var, type = "coverage")
     })
     
-    output$nurses_subset_table <- renderDataTable(nurses_subset_selected(input))
+    # Renders the data table showing the subset of the nurses data selected by the user.
+    output$nurses_subset_table <- renderDataTable(nurses_subset_selected())
 }
 
 # Run the app ---------------------------------------------------------------------------------

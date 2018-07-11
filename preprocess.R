@@ -14,6 +14,8 @@ nurses <- read_csv("nurses.csv")
 
 # Do the preprocessing ------------------------------------------------------------------------
 
+# TODO: Technically, we don't need to actually do factor coding here.
+
 # Code sex from the appropriate CPS variable.
 sex_code <- function(pesex) {
     pesex %>% map_chr(function(x) {
@@ -97,6 +99,24 @@ citizenship_code <- function(prcitshp) {
     }) %>% factor(levels = citizenship_factor_levels())
 }
 
+# Code state from appropriate CPS variable.
+state_code <- function(gestfips) {
+    state_table <- state_table()
+    gestfips %>% map_chr(function(x) {
+        if (is.na(x))
+            NA
+        else {
+            key <- as.character(x)
+            state <- state_table[[key]]
+            if (is_null(state)) {
+                # TODO: Put assertion here.
+            }
+            
+            state
+        }
+    }) %>% factor(levels = state_factor_levels())
+}
+
 nurses_preprocessed <- nurses %>%
     # TODO: For now, I'm dropping the unused variables. May probably want to keep them in the end
     # so that they can be included in a download selection (another option: just use the raw data
@@ -111,11 +131,10 @@ nurses_preprocessed <- nurses %>%
         age = ifelse(is.na(peage), prtage, peage),
         age_group = age_group_code(age),
         race = race_code(ptdtrace),
-        # NOTE: Hispanic status is independent of race.
         hisp = (pehspnon == 1),
         educ = education_code(peeduca),
-        citizen = citizenship_code(prcitshp)
-        # TODO: Define geography variable(s).
+        citizen = citizenship_code(prcitshp),
+        state = state_code(gestfips)
     ) %>%
     filter(age >= 16)
 

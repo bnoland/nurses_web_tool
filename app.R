@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyBS)
+library(shinyWidgets)
 # TODO: Import entire tidyverse?
 library(tidyverse)
 
@@ -7,8 +8,7 @@ source("factor_levels.R")
 
 # Load the data -------------------------------------------------------------------------------
 
-# TODO: Should I have bothered coding all these variables as factors?? It adds a lot of additional
-# code (for a marginal improvement in readability).
+# TODO: Should I have bothered coding all these variables as factors?
 
 nurses <- read_csv("nurses_preprocessed.csv",
     col_types = cols(
@@ -17,11 +17,12 @@ nurses <- read_csv("nurses_preprocessed.csv",
         member = col_logical(),
         covered = col_logical(),
         age = col_integer(),
-        age_group = col_factor(age_group_factor_levels()),
+        age_group = col_factor(levels = age_group_factor_levels()),
         race = col_factor(race_factor_levels()),
         hisp = col_logical(),
-        educ = col_factor(education_factor_levels()),
-        citizen = col_factor(citizenship_factor_levels())
+        educ = col_factor(levels = education_factor_levels()),
+        citizen = col_factor(levels = citizenship_factor_levels()),
+        state = col_factor(levels = state_factor_levels())
     )
 )
 
@@ -92,8 +93,16 @@ ui <- fluidPage(
                                        selected = citizenship_factor_levels())
                 ),
                 
-                # TODO: How to handle geographic region reasonably?
-                bsCollapsePanel(title = "Geography")
+                # TODO: Should we include statistical regions other than states?
+                # State selection.
+                bsCollapsePanel(title = "States",
+                    # TODO: Get state selection working.
+                    pickerInput(inputId = "state_selection", label = NULL,
+                                choices = levels(nurses$state),
+                                selected = levels(nurses$state),
+                                multiple = TRUE,
+                                options = list(`actions-box` = TRUE))
+                )
             )
         ),
         
@@ -147,7 +156,8 @@ ui <- fluidPage(
                                             "Race" = "race",
                                             "Hispanic status" = "hisp",
                                             "Level of education" = "educ",
-                                            "Citizenship status" = "citizen"
+                                            "Citizenship status" = "citizen",
+                                            "State" = "state"
                                         )
                                     )
                                 )
@@ -240,7 +250,8 @@ server <- function(input, output) {
                 race %in% input$race_selection,
                 hisp %in% input$hisp_status_selection,
                 educ %in% input$educ_selection,
-                citizen %in% input$citizen_selection
+                citizen %in% input$citizen_selection,
+                state %in% input$state_selection
             )
     })
     

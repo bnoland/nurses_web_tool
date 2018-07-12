@@ -117,6 +117,7 @@ state_code <- function(gestfips) {
     }) %>% factor(levels = state_factor_levels())
 }
 
+# TODO: Need to add county codes.
 nurses_preprocessed <- nurses %>%
     # TODO: For now, I'm dropping the unused variables. May probably want to keep them in the end
     # so that they can be included in a download selection (another option: just use the raw data

@@ -3,6 +3,7 @@ library(shinyBS)
 library(shinyWidgets)
 # TODO: Import entire tidyverse?
 library(tidyverse)
+library(usmap)
 
 source("factor_levels.R")
 
@@ -108,6 +109,8 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
+                # TODO: For convenience, for now.
+                selected = "Geography",
                 
                 # Trends panel.
                 tabPanel(title = "Trends",
@@ -133,13 +136,17 @@ ui <- fluidPage(
                         
                         # Panel for viewing the data used for generating the trend plots.
                         tabPanel(title = "Data",
-                            fluidRow(width = 12,
-                                h3("Membership proportion"),
-                                dataTableOutput("membership_trend_data")
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Membership proportion"),
+                                    dataTableOutput("membership_trend_data")
+                                )
                             ),
-                            fluidRow(width = 12,
-                                h3("Coverage proportion"),
-                                dataTableOutput("coverage_trend_data")
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Coverage proportion"),
+                                    dataTableOutput("coverage_trend_data")
+                                )
                             )
                         ),
                         
@@ -173,18 +180,59 @@ ui <- fluidPage(
                     tabsetPanel(type = "tabs",
                         
                         # Panel for viewing chloropleth maps.
-                        tabPanel(title = "Maps"),
+                        tabPanel(title = "Maps",
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Membership proportion"),
+                                    plotOutput("membership_state_map")
+                                )
+                            ),
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Coverage proportion"),
+                                    plotOutput("coverage_state_map")
+                                )
+                            )
+                        ),
                         
                         # Panel for viewing the data used to generate the maps.
-                        tabPanel(title = "Data"),
+                        tabPanel(title = "Data",
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Membership proportion"),
+                                    dataTableOutput("membership_state_data")
+                                )
+                            ),
+                            fluidRow(
+                                column(width = 12,
+                                    h3("Coverage proportion"),
+                                    dataTableOutput("coverage_state_data")
+                                )
+                            )
+                        ),
                         
                         # Panel for setting options related to the maps.
-                        tabPanel(title = "Options")
+                        tabPanel(title = "Options",
+                            fluidRow(
+                                column(width = 12,
+                                    checkboxInput(inputId = "county_level",
+                                                  label = "Provide county-level data and maps"),
+                                    checkboxInput(inputId = "selected_states_only",
+                                                  label = "Show selected states only")
+                                )
+                            )
+                        )
                     )
                 ),
                 
                 # Data viewer panel.
-                tabPanel(title = "Data", dataTableOutput("nurses_subset_table"))
+                tabPanel(title = "Data",
+                    fluidRow(
+                        column(width = 12,
+                            dataTableOutput("nurses_subset_table")
+                        )
+                    )
+                )
                 #tabPanel("Download", "Download the data.")
             )
         )
@@ -228,6 +276,7 @@ trend_plot <- function(nurses_subset, group_var, type) {
     trend_data <- trend_data(nurses_subset, group_var, type)
     
     group_var <- as.symbol(group_var)
+    # TODO: aes() vs aes_()?
     if (group_var != "none") {
         p <- ggplot(trend_data,
                     aes_(quote(year), quote(prop), color = group_var))
@@ -236,6 +285,54 @@ trend_plot <- function(nurses_subset, group_var, type) {
     }
     
     p + geom_line() + expand_limits(y = 0)
+}
+
+# Return state-level union membership or union contract coverage.
+# TODO: Need to handle counties.
+state_data <- function(nurses_subset, county_level, type) {
+    nurses_subset_grouped <- nurses_subset %>% group_by(state)
+    
+    if (type == "membership") {
+        nurses_subset_grouped <- nurses_subset_grouped %>%
+            summarize(
+                prop = mean(member, na.rm = TRUE),
+                n = n()
+            )
+    } else if (type == "coverage") {
+        nurses_subset_grouped <- nurses_subset_grouped %>%
+            summarize(
+                prop = mean(covered, na.rm = TRUE),
+                n = n()
+            )
+    } else {
+        # TODO: Put an assertion here.
+    }
+    
+    nurses_subset_grouped
+}
+
+# Plot a chloropleth map showing state-level union membership or union contract coverage.
+# TODO: Need to handle counties.
+# TODO: Map styling, etc.
+state_map <- function(nurses_subset, county_level, selected_states_only, type) {
+    state_data <- state_data(nurses_subset, county_level, type)
+    
+    if (type == "membership") {
+        legend_name <- "Proportion members"
+    } else if (type == "coverage") {
+        legend_name <- "Proportion covered"
+    } else {
+        # TODO: Put an assertion here.
+    }
+    
+    states <- NULL
+    if (selected_states_only)
+        states <- state_data$state
+    
+    # TODO: Am I doing this right?
+    plot_usmap(data = state_data, value = "prop", include = states) +
+        scale_fill_continuous(name = legend_name, label = scales::comma) +
+        theme(legend.position = "right")
 }
 
 server <- function(input, output) {
@@ -281,6 +378,36 @@ server <- function(input, output) {
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
         trend_data(nurses_subset, group_var, type = "coverage")
+    })
+    
+    # Renders the map showing union membership at the state-level.
+    output$membership_state_map <- renderPlot({
+        nurses_subset <- nurses_subset_selected()
+        county_level <- input$county_level
+        selected_states_only <- input$selected_states_only
+        state_map(nurses_subset, county_level, selected_states_only, type = "membership")
+    })
+    
+    # Renders the map showing union contract coverage at the state-level.
+    output$coverage_state_map <- renderPlot({
+        nurses_subset <- nurses_subset_selected()
+        county_level <- input$county_level
+        selected_states_only <- input$selected_states_only
+        state_map(nurses_subset, county_level, selected_states_only, type = "coverage")
+    })
+    
+    # Renders the data table showing the state-level union membership data.
+    output$membership_state_data <- renderDataTable({
+        nurses_subset <- nurses_subset_selected()
+        county_level <- input$county_level
+        state_data(nurses_subset, county_level, type = "membership")
+    })
+    
+    # Renders the data table showing the state-level union contract coverage data.
+    output$coverage_state_data <- renderDataTable({
+        nurses_subset <- nurses_subset_selected()
+        county_level <- input$county_level
+        state_data(nurses_subset, county_level, type = "coverage")
     })
     
     # Renders the data table showing the subset of the nurses data selected by the user.

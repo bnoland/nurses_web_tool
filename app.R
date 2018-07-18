@@ -44,7 +44,8 @@ ui <- fluidPage(
             bsCollapse(
                 # Year range selection.
                 bsCollapsePanel(title = "Year range",
-                    sliderInput(inputId = "year_range", label = NULL,
+                    sliderInput(inputId = "year_range",
+                        label = NULL,
                         # TODO: Why do min/max need to be doubles for this to work correctly?
                         min = min_year, max = max_year,
                         value = c(min_year, max_year),
@@ -54,55 +55,67 @@ ui <- fluidPage(
                 
                 # Sex selection.
                 bsCollapsePanel(title = "Sex",
-                    checkboxGroupInput(inputId = "sex_selection", label = NULL,
-                                       choices = sex_factor_levels(),
-                                       selected = sex_factor_levels())
+                    checkboxGroupInput(inputId = "sex_selection",
+                        label = NULL,
+                        choices = sex_factor_levels(),
+                        selected = sex_factor_levels()
+                    )
                 ),
                 
                 # Age group selection.
                 bsCollapsePanel(title = "Age group",
-                    checkboxGroupInput(inputId = "age_selection", label = NULL,
-                                       choices = age_group_factor_levels(),
-                                       selected = age_group_factor_levels())
+                    checkboxGroupInput(inputId = "age_selection",
+                        label = NULL,
+                        choices = age_group_factor_levels(),
+                        selected = age_group_factor_levels()
+                    )
                 ),
                 
                 # Race selection.
                 bsCollapsePanel(title = "Race",
-                    checkboxGroupInput(inputId = "race_selection", label = NULL,
-                                       choices = race_factor_levels(),
-                                       selected = race_factor_levels())
+                    checkboxGroupInput(inputId = "race_selection",
+                        label = NULL,
+                        choices = race_factor_levels(),
+                        selected = race_factor_levels()
+                    )
                 ),
                 
                 # Hispanic status selection.
                 bsCollapsePanel(title = "Hispanic status",
-                    checkboxGroupInput(inputId = "hisp_status_selection", label = NULL,
-                                       choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
-                                       selected = c(TRUE, FALSE))
+                    checkboxGroupInput(inputId = "hisp_status_selection",
+                        label = NULL,
+                        choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
+                        selected = c(TRUE, FALSE)
+                    )
                 ),
                 
                 # Education level selection.
                 bsCollapsePanel(title = "Level of education",
-                    checkboxGroupInput(inputId = "educ_selection", label = NULL,
-                                       choices = education_factor_levels(),
-                                       selected = education_factor_levels())
+                    checkboxGroupInput(inputId = "educ_selection",
+                        label = NULL,
+                        choices = education_factor_levels(),
+                        selected = education_factor_levels()
+                    )
                 ),
                 
                 # Citizenship status selection.
                 bsCollapsePanel(title = "Citizenship status",
-                    checkboxGroupInput(inputId = "citizen_selection", label = NULL,
-                                       choices = citizenship_factor_levels(),
-                                       selected = citizenship_factor_levels())
+                    checkboxGroupInput(inputId = "citizen_selection",
+                        label = NULL,
+                        choices = citizenship_factor_levels(),
+                        selected = citizenship_factor_levels()
+                    )
                 ),
                 
-                # TODO: Should we include statistical regions other than states?
                 # State selection.
                 bsCollapsePanel(title = "States",
-                    # TODO: Get state selection working.
-                    pickerInput(inputId = "state_selection", label = NULL,
-                                choices = levels(nurses$state),
-                                selected = levels(nurses$state),
-                                multiple = TRUE,
-                                options = list(`actions-box` = TRUE))
+                    pickerInput(inputId = "state_selection",
+                        label = NULL,
+                        choices = levels(nurses$state),
+                        selected = levels(nurses$state),
+                        multiple = TRUE,
+                        options = list(`actions-box` = TRUE)
+                    )
                 )
             )
         ),
@@ -118,16 +131,18 @@ ui <- fluidPage(
                     tabsetPanel(type = "tabs",
                         
                         # Panel for viewing trend plots.
+                        # TODO: Make the plots a fixed size?
                         tabPanel(title = "Plots",
-                            # TODO: Make the plots a fixed size?
                             fluidRow(
                                 column(width = 12,
+                                    # Trend plot for union membership coverage.
                                     h3("Membership proportion"),
                                     plotOutput("members_trend_plot")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
+                                    # Trend plot for union contract coverage.
                                     h3("Coverage proportion"),
                                     plotOutput("coverage_trend_plot")
                                 )
@@ -138,12 +153,16 @@ ui <- fluidPage(
                         tabPanel(title = "Data",
                             fluidRow(
                                 column(width = 12,
+                                    # Data table showing the data used to generate the union
+                                    # membership trend plot.
                                     h3("Membership proportion"),
                                     dataTableOutput("membership_trend_data")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
+                                    # Data table showing the data used to generate the union
+                                    # contract coverage trend plot.
                                     h3("Coverage proportion"),
                                     dataTableOutput("coverage_trend_data")
                                 )
@@ -155,7 +174,13 @@ ui <- fluidPage(
                             br(),
                             fluidRow(
                                 column(width = 12,
-                                    selectInput(inputId = "trends_group_var", label = "Group by:",
+                                    # Widget for selecting the variable to group by in the trend
+                                    # data.
+                                    selectInput(inputId = "trends_group_var",
+                                        label = "Group by:",
+                                        # The value of each choice is a variable name in the data
+                                        # set, except for ``none'', which corresponds to no
+                                        # grouping.
                                         choices = list(
                                             "None" = "none",
                                             "Sex" = "sex",
@@ -183,12 +208,14 @@ ui <- fluidPage(
                         tabPanel(title = "Maps",
                             fluidRow(
                                 column(width = 12,
+                                    # Map showing union membership per state.
                                     h3("Membership proportion"),
                                     plotOutput("membership_state_map")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
+                                    # Map showing union contract coverage per state.
                                     h3("Coverage proportion"),
                                     plotOutput("coverage_state_map")
                                 )
@@ -199,12 +226,16 @@ ui <- fluidPage(
                         tabPanel(title = "Data",
                             fluidRow(
                                 column(width = 12,
+                                    # Data table showing the data used to generate the union
+                                    # membership map.
                                     h3("Membership proportion"),
                                     dataTableOutput("membership_state_data")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
+                                    # Data table showing the data used to generate the union
+                                    # contract coverage map.
                                     h3("Coverage proportion"),
                                     dataTableOutput("coverage_state_data")
                                 )
@@ -215,10 +246,9 @@ ui <- fluidPage(
                         tabPanel(title = "Options",
                             fluidRow(
                                 column(width = 12,
-                                    checkboxInput(inputId = "county_level",
-                                                  label = "Provide county-level data and maps"),
                                     checkboxInput(inputId = "selected_states_only",
-                                                  label = "Show selected states only")
+                                        label = "Show selected states only"
+                                    )
                                 )
                             )
                         )
@@ -233,7 +263,6 @@ ui <- fluidPage(
                         )
                     )
                 )
-                #tabPanel("Download", "Download the data.")
             )
         )
     )
@@ -242,35 +271,49 @@ ui <- fluidPage(
 # Server logic --------------------------------------------------------------------------------
 
 # Return union membership or union contract coverage trend data.
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   group_var
+#       Variable to group by as a string. ``none'' if no grouping.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
 trend_data <- function(nurses_subset, group_var, type) {
-    nurses_subset_grouped <- nurses_subset %>% group_by(year)
+    trend_data <- nurses_subset %>% group_by(year)
     
     group_var <- as.symbol(group_var)
     if (group_var != "none") {
-        nurses_subset_grouped <- nurses_subset_grouped %>%
+        trend_data <- trend_data %>%
             group_by(.dots = group_var, add = TRUE)
     }
     
     if (type == "membership") {
-        nurses_subset_grouped <- nurses_subset_grouped %>%
+        trend_data <- trend_data %>%
             summarize(
                 prop = mean(member, na.rm = TRUE),
                 n = n()
             )
     } else if (type == "coverage") {
-        nurses_subset_grouped <- nurses_subset_grouped %>%
+        trend_data <- trend_data %>%
             summarize(
                 prop = mean(covered, na.rm = TRUE),
                 n = n()
             )
     } else {
-        # TODO: Put an assertion here.
+        stop("Type must be either ``membership'' or ``coverage''.")
     }
     
-    nurses_subset_grouped
+    trend_data
 }
 
 # Plot union membership or union contract coverage over time.
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   group_var
+#       Variable to group by as a string. ``none'' if no grouping.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
 # TODO: Plot axis labels, etc. + plot styling.
 trend_plot <- function(nurses_subset, group_var, type) {
     trend_data <- trend_data(nurses_subset, group_var, type)
@@ -288,43 +331,55 @@ trend_plot <- function(nurses_subset, group_var, type) {
 }
 
 # Return state-level union membership or union contract coverage.
-# TODO: Need to handle counties.
-state_data <- function(nurses_subset, county_level, type) {
-    nurses_subset_grouped <- nurses_subset %>% group_by(state)
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
+state_data <- function(nurses_subset, type) {
+    state_data <- nurses_subset %>% group_by(state)
     
     if (type == "membership") {
-        nurses_subset_grouped <- nurses_subset_grouped %>%
+        state_data <- state_data %>%
             summarize(
                 prop = mean(member, na.rm = TRUE),
                 n = n()
             )
     } else if (type == "coverage") {
-        nurses_subset_grouped <- nurses_subset_grouped %>%
+        state_data <- state_data %>%
             summarize(
                 prop = mean(covered, na.rm = TRUE),
                 n = n()
             )
     } else {
-        # TODO: Put an assertion here.
+        stop("Type must be either ``membership'' or ``coverage''.")
     }
     
-    nurses_subset_grouped
+    state_data
 }
 
 # Plot a chloropleth map showing state-level union membership or union contract coverage.
-# TODO: Need to handle counties.
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   selected_states_only
+#       If TRUE, display only the states selected by the user on the map; otherwise, show all
+#       states.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
 # TODO: Map styling, etc.
-state_map <- function(nurses_subset, county_level, selected_states_only, type) {
-    state_data <- state_data(nurses_subset, county_level, type)
+state_map <- function(nurses_subset, selected_states_only, type) {
+    state_data <- state_data(nurses_subset, type)
     
     if (type == "membership") {
         legend_name <- "Proportion members"
     } else if (type == "coverage") {
         legend_name <- "Proportion covered"
     } else {
-        # TODO: Put an assertion here.
+        stop("Type must be either ``membership'' or ``coverage''.")
     }
     
+    # TODO: Am I doing this right?
     states <- NULL
     if (selected_states_only)
         states <- state_data$state
@@ -336,6 +391,7 @@ state_map <- function(nurses_subset, county_level, selected_states_only, type) {
 }
 
 server <- function(input, output) {
+    ## Handle data subset selection ##
     
     # Returns the subset of the nurses data selected by the user.
     nurses_subset_selected <- reactive({
@@ -351,6 +407,8 @@ server <- function(input, output) {
                 state %in% input$state_selection
             )
     })
+    
+    ## Trend plots and associated data tables ##
     
     # Renders the trend plot for union membership.
     output$members_trend_plot <- renderPlot({
@@ -373,42 +431,42 @@ server <- function(input, output) {
         trend_data(nurses_subset, group_var, type = "membership")
     })
     
-    # Renders the data table showing the union contract coverage data.
+    # Renders the data table showing the union contract coverage trend data.
     output$coverage_trend_data <- renderDataTable({
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
         trend_data(nurses_subset, group_var, type = "coverage")
     })
     
+    ## Maps and associated data tables ##
+    
     # Renders the map showing union membership at the state-level.
     output$membership_state_map <- renderPlot({
         nurses_subset <- nurses_subset_selected()
-        county_level <- input$county_level
         selected_states_only <- input$selected_states_only
-        state_map(nurses_subset, county_level, selected_states_only, type = "membership")
+        state_map(nurses_subset, selected_states_only, type = "membership")
     })
     
     # Renders the map showing union contract coverage at the state-level.
     output$coverage_state_map <- renderPlot({
         nurses_subset <- nurses_subset_selected()
-        county_level <- input$county_level
         selected_states_only <- input$selected_states_only
-        state_map(nurses_subset, county_level, selected_states_only, type = "coverage")
+        state_map(nurses_subset, selected_states_only, type = "coverage")
     })
     
     # Renders the data table showing the state-level union membership data.
     output$membership_state_data <- renderDataTable({
         nurses_subset <- nurses_subset_selected()
-        county_level <- input$county_level
-        state_data(nurses_subset, county_level, type = "membership")
+        state_data(nurses_subset, type = "membership")
     })
     
     # Renders the data table showing the state-level union contract coverage data.
     output$coverage_state_data <- renderDataTable({
         nurses_subset <- nurses_subset_selected()
-        county_level <- input$county_level
-        state_data(nurses_subset, county_level, type = "coverage")
+        state_data(nurses_subset, type = "coverage")
     })
+    
+    ## Data table showing entire data selection ##
     
     # Renders the data table showing the subset of the nurses data selected by the user.
     output$nurses_subset_table <- renderDataTable(nurses_subset_selected())

@@ -86,8 +86,8 @@ ui <- fluidPage(
                 bsCollapsePanel(title = "States",
                     pickerInput(inputId = "state_selection",
                         label = NULL,
-                        choices = levels(nurses$state),
-                        selected = levels(nurses$state),
+                        choices = state_factor_levels(),
+                        selected = state_factor_levels(),
                         multiple = TRUE,
                         options = list(`actions-box` = TRUE)
                     )

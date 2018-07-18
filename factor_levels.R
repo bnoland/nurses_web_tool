@@ -1,8 +1,6 @@
 # A few helper functions that return the appropriate factor levels for pertinent categorical
 # variables.
 
-source("state_table.R")
-
 sex_factor_levels <- function() {
     c(
         "Male",
@@ -50,5 +48,6 @@ citizenship_factor_levels <- function() {
 }
 
 state_factor_levels <- function() {
-    as.character(state_table())
+    source("state_table.R", local = TRUE)
+    as.character(state_table)
 }

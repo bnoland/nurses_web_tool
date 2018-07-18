@@ -3,18 +3,16 @@
 # TODO: Note that, for the sake of posterity, this doesn't make use of any of the variables created
 # by Doug Kruse's script. In the future, it would probably be better to use the actual raw CPS data.
 
-library(tidyverse)
-
-source("factor_levels.R")
+library(readr)
+library(dplyr)
+library(purrr)
+library(forcats)
 
 # Load the raw data ---------------------------------------------------------------------------
 
-# TODO: Column specifications?
 nurses <- read_csv("nurses.csv")
 
 # Do the preprocessing ------------------------------------------------------------------------
-
-# TODO: Technically, we don't need to actually do factor coding here.
 
 # Code sex from the appropriate CPS variable.
 sex_code <- function(pesex) {
@@ -27,7 +25,7 @@ sex_code <- function(pesex) {
             "Female"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = sex_factor_levels())
+    })
 }
 
 # Code age group from age.
@@ -58,7 +56,7 @@ race_code <- function(ptdtrace) {
         } else {
             "Other"
         }
-    }) %>% factor(levels = race_factor_levels())
+    })
 }
 
 # Code education level from the appropriate CPS variable.
@@ -80,7 +78,7 @@ education_code <- function(peeduca) {
             "Graduate degree"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = education_factor_levels())
+    })
 }
 
 # Code citizenship status from the appropriate CPS variable.
@@ -96,12 +94,13 @@ citizenship_code <- function(prcitshp) {
             "Foreign-born, non-citizen"
         }
         # TODO: Add assertion here.
-    }) %>% factor(levels = citizenship_factor_levels())
+    })
 }
 
 # Code state from appropriate CPS variable.
 state_code <- function(gestfips) {
-    state_table <- state_table()
+    source("state_table.R", local = TRUE)
+    
     gestfips %>% map_chr(function(x) {
         if (is.na(x))
             NA
@@ -114,14 +113,10 @@ state_code <- function(gestfips) {
             
             state
         }
-    }) %>% factor(levels = state_factor_levels())
+    })
 }
 
-# TODO: Need to add county codes.
 nurses_preprocessed <- nurses %>%
-    # TODO: For now, I'm dropping the unused variables. May probably want to keep them in the end
-    # so that they can be included in a download selection (another option: just use the raw data
-    # for downloads).
     transmute(
         # TODO: Doug Kruse's script already renamed ``hryear4'' to ``year''.
         #year = hryear4,

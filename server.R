@@ -131,9 +131,8 @@ state_map <- function(nurses_subset, selected_states_only, type) {
 
 # Server logic --------------------------------------------------------------------------------
 
+# TODO: The server() function is too long -- may want to modularize in some way.
 server <- function(input, output) {
-    ## Handle data subset selection ##
-    
     # Returns the subset of the nurses data selected by the user.
     nurses_subset_selected <- reactive({
         nurses %>%
@@ -148,8 +147,6 @@ server <- function(input, output) {
                 state %in% input$state_selection
             )
     })
-    
-    ## Trend plots and associated data tables ##
     
     # Renders the trend plot for union membership.
     output$members_trend_plot <- renderPlot({
@@ -179,8 +176,6 @@ server <- function(input, output) {
         trend_data(nurses_subset, group_var, type = "coverage")
     })
     
-    ## Maps and associated data tables ##
-    
     # Renders the map showing union membership at the state-level.
     output$membership_state_map <- renderPlot({
         nurses_subset <- nurses_subset_selected()
@@ -206,8 +201,6 @@ server <- function(input, output) {
         nurses_subset <- nurses_subset_selected()
         state_data(nurses_subset, type = "coverage")
     })
-    
-    ## Data table showing entire data selection ##
     
     # Renders the data table showing the subset of the nurses data selected by the user.
     output$nurses_subset_table <- renderDataTable(nurses_subset_selected())

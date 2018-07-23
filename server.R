@@ -66,7 +66,10 @@ trend_plot <- function(nurses_subset, group_var, type) {
         p <- ggplot(trend_data, aes(year, prop))
     }
     
-    p + geom_line() + expand_limits(y = 0)
+    # TODO: Using fixed scales for now, but this can make it hard to detect subtle differences.
+    # Should this be an option?
+    #p + geom_line() + expand_limits(y = 0)
+    p + geom_line() + coord_cartesian(ylim = c(0, 1))
 }
 
 # Return state-level union membership or union contract coverage.
@@ -123,9 +126,11 @@ state_map <- function(nurses_subset, selected_states_only, type) {
     if (selected_states_only)
         states <- state_data$state
     
-    # TODO: Am I doing this right?
+    # TODO: Using fixed scales for now, but this can make it hard to detect subtle differences.
+    # Should this be an option?
     plot_usmap(data = state_data, value = "prop", include = states) +
-        scale_fill_continuous(name = legend_name, label = scales::comma) +
+        scale_fill_gradient(low = "#56B1F7", high = "#132B43", na.value = "gray",
+                            name = legend_name, limits = c(0, 1), label = scales::comma) +
         theme(legend.position = "right")
 }
 

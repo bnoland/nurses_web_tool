@@ -16,7 +16,11 @@ ui <- fluidPage(
             # Hack to force the slider input widget to only put tick marks at integer values.
             tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
             
-            bsCollapse(
+            # Hack to ensure the checkboxes in the variable selection panel are properly aligned.
+            tags$style(type = "text/css", "#selection-panel .awesome-checkbox label {width: 80%;}"),
+            
+            # TODO: Am I guaranteed to set the CSS id thought the ``id'' attribute?
+            bsCollapse(id = "selection-panel",
                 # Year range selection.
                 bsCollapsePanel(title = "Year range",
                     sliderInput(inputId = "year_range",
@@ -30,7 +34,7 @@ ui <- fluidPage(
                 
                 # Sex selection.
                 bsCollapsePanel(title = "Sex",
-                    checkboxGroupInput(inputId = "sex_selection",
+                    awesomeCheckboxGroup(inputId = "sex_selection",
                         label = NULL,
                         choices = sex_factor_levels(),
                         selected = sex_factor_levels()
@@ -39,7 +43,7 @@ ui <- fluidPage(
                 
                 # Age group selection.
                 bsCollapsePanel(title = "Age group",
-                    checkboxGroupInput(inputId = "age_selection",
+                    awesomeCheckboxGroup(inputId = "age_selection",
                         label = NULL,
                         choices = age_group_factor_levels(),
                         selected = age_group_factor_levels()
@@ -48,7 +52,7 @@ ui <- fluidPage(
                 
                 # Race selection.
                 bsCollapsePanel(title = "Race",
-                    checkboxGroupInput(inputId = "race_selection",
+                    awesomeCheckboxGroup(inputId = "race_selection",
                         label = NULL,
                         choices = race_factor_levels(),
                         selected = race_factor_levels()
@@ -57,7 +61,7 @@ ui <- fluidPage(
                 
                 # Hispanic status selection.
                 bsCollapsePanel(title = "Hispanic status",
-                    checkboxGroupInput(inputId = "hisp_status_selection",
+                    awesomeCheckboxGroup(inputId = "hisp_status_selection",
                         label = NULL,
                         choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
                         selected = c(TRUE, FALSE)
@@ -66,7 +70,7 @@ ui <- fluidPage(
                 
                 # Education level selection.
                 bsCollapsePanel(title = "Level of education",
-                    checkboxGroupInput(inputId = "educ_selection",
+                    awesomeCheckboxGroup(inputId = "educ_selection",
                         label = NULL,
                         choices = education_factor_levels(),
                         selected = education_factor_levels()
@@ -75,7 +79,7 @@ ui <- fluidPage(
                 
                 # Citizenship status selection.
                 bsCollapsePanel(title = "Citizenship status",
-                    checkboxGroupInput(inputId = "citizen_selection",
+                    awesomeCheckboxGroup(inputId = "citizen_selection",
                         label = NULL,
                         choices = citizenship_factor_levels(),
                         selected = citizenship_factor_levels()
@@ -97,8 +101,6 @@ ui <- fluidPage(
         
         mainPanel(
             tabsetPanel(type = "tabs",
-                # TODO: For convenience, for now.
-                selected = "Geography",
                 
                 # Trends panel.
                 tabPanel(title = "Trends",

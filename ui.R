@@ -223,7 +223,7 @@ ui <- fluidPage(
                         tabPanel(title = "Options",
                             fluidRow(
                                 column(width = 12,
-                                    checkboxInput(inputId = "selected_states_only",
+                                    awesomeCheckbox(inputId = "selected_states_only",
                                         label = "Show selected states only"
                                     )
                                 )

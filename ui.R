@@ -235,8 +235,10 @@ ui <- fluidPage(
                                         label = "Show selected states only"
                                     ),
                                     
-                                    # If selected, use a fixed color scale on the chloropleth maps.
+                                    # If selected, fix the color scale on the maps to assign colors
+                                    # to all proportions from 0 to 1, inclusive.
                                     awesomeCheckbox(inputId = "maps_fixed_scale",
+                                        # TODO: Better label.
                                         label = "Fix the color scale on the chloropleth maps"
                                     )
                                 )

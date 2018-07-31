@@ -109,11 +109,13 @@ state_data <- function(nurses_subset, type) {
 #   selected_states_only
 #       If TRUE, display only the states selected by the user on the map; otherwise, show all
 #       states.
+#   fixed_scale
+#       Fix the color scale on the map to assign colors to all proportions from 0 to 1, inclusive.
 #   type
 #       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
 #       contract coverage rate).
 # TODO: Map styling, etc.
-state_map <- function(nurses_subset, selected_states_only, type) {
+state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
     state_data <- state_data(nurses_subset, type)
     
     if (type == "membership") {
@@ -129,12 +131,19 @@ state_map <- function(nurses_subset, selected_states_only, type) {
     if (selected_states_only)
         states <- state_data$state
     
-    # TODO: Using fixed scales for now, but this can make it hard to detect subtle differences.
-    # Should this be an option?
+    scale_max <- NA
+    if (fixed_scale)
+        scale_max <- 1
+    
+    # When no states are selected, ggplot can't infer the scale limits from the data, so we have
+    # to set it to some number.
+    if (length(state_data$state) == 0)
+        scale_max <- 1
+    
     # TODO: What colors to use for the scale?
     plot_usmap(data = state_data, value = "prop", include = states) +
         scale_fill_gradient(low = "#56B1F7", high = "#132B43", na.value = "gray",
-                            name = legend_name, limits = c(0, 1), label = scales::comma) +
+                            name = legend_name, limits = c(0, scale_max), label = scales::comma) +
         theme(legend.position = "right")
 }
 
@@ -191,14 +200,16 @@ server <- function(input, output) {
     output$membership_state_map <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         selected_states_only <- input$selected_states_only
-        state_map(nurses_subset, selected_states_only, type = "membership")
+        fixed_scale <- input$maps_fixed_scale
+        state_map(nurses_subset, selected_states_only, fixed_scale, type = "membership")
     })
     
     # Renders the map showing union contract coverage at the state-level.
     output$coverage_state_map <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         selected_states_only <- input$selected_states_only
-        state_map(nurses_subset, selected_states_only, type = "coverage")
+        fixed_scale <- input$maps_fixed_scale
+        state_map(nurses_subset, selected_states_only, fixed_scale, type = "coverage")
     })
     
     # Renders the data table showing the state-level union membership data.

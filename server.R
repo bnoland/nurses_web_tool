@@ -50,11 +50,13 @@ trend_data <- function(nurses_subset, group_var, type) {
 #       Subset of the data selected by the user.
 #   group_var
 #       Variable to group by as a string. ``none'' if no grouping.
+#   fixed_axis
+#       Fix the vertical axis to be from 0 to 1, inclusive.
 #   type
 #       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
 #       contract coverage rate).
 # TODO: Plot axis labels, etc. + plot styling.
-trend_plot <- function(nurses_subset, group_var, type) {
+trend_plot <- function(nurses_subset, group_var, fixed_axis, type) {
     trend_data <- trend_data(nurses_subset, group_var, type)
     
     group_var <- as.symbol(group_var)
@@ -66,10 +68,11 @@ trend_plot <- function(nurses_subset, group_var, type) {
         p <- ggplot(trend_data, aes(year, prop))
     }
     
-    # TODO: Using fixed scales for now, but this can make it hard to detect subtle differences.
-    # Should this be an option?
-    #p + geom_line() + expand_limits(y = 0)
-    p + geom_line() + coord_cartesian(ylim = c(0, 1))
+    if (fixed_axis) {
+        p + geom_line() + coord_cartesian(ylim = c(0, 1))
+    } else {
+        p + geom_line() + expand_limits(y = 0)
+    }
 }
 
 # Return state-level union membership or union contract coverage.
@@ -158,14 +161,16 @@ server <- function(input, output) {
     output$members_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
-        trend_plot(nurses_subset, group_var, type = "membership")
+        fixed_axis <- input$trends_fixed_axis
+        trend_plot(nurses_subset, group_var, fixed_axis, type = "membership")
     })
     
     # Renders the trend plot for union contract coverage.
     output$coverage_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
-        trend_plot(nurses_subset, group_var, type = "coverage")
+        fixed_axis <- input$trends_fixed_axis
+        trend_plot(nurses_subset, group_var, fixed_axis, type = "coverage")
     })
     
     # Renders the data table showing the union membership trend data.

@@ -168,6 +168,12 @@ ui <- fluidPage(
                                             "Citizenship status" = "citizen",
                                             "State" = "state"
                                         )
+                                    ),
+                                    
+                                    # If selected, fix the vertical axis on each trend plot to be
+                                    # from 0 to 1, inclusive.
+                                    awesomeCheckbox(inputId = "trends_fixed_axis",
+                                        label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     )
                                 )
                             )
@@ -223,8 +229,15 @@ ui <- fluidPage(
                         tabPanel(title = "Options",
                             fluidRow(
                                 column(width = 12,
+                                    # If selected, show only the states selected by the user in the
+                                    # chloropleth maps.
                                     awesomeCheckbox(inputId = "selected_states_only",
                                         label = "Show selected states only"
+                                    ),
+                                    
+                                    # If selected, use a fixed color scale on the chloropleth maps.
+                                    awesomeCheckbox(inputId = "maps_fixed_scale",
+                                        label = "Fix the color scale on the chloropleth maps"
                                     )
                                 )
                             )
@@ -235,6 +248,7 @@ ui <- fluidPage(
                 # Data viewer panel.
                 tabPanel(title = "Data",
                     fluidRow(
+                        # Data table showing the subset of the nurses data selected by the user.
                         column(width = 12,
                             dataTableOutput("nurses_subset_table")
                         )

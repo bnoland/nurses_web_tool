@@ -155,29 +155,50 @@ ui <- fluidPage(
                             br(),
                             fluidRow(
                                 column(width = 12,
-                                    # Widget for selecting the variable to group by in the trend
-                                    # data.
-                                    selectInput(inputId = "trends_group_var",
-                                        label = "Group by:",
-                                        # The value of each choice is a variable name in the data
-                                        # set, except for ``none'', which corresponds to no
-                                        # grouping.
-                                        choices = list(
-                                            "None" = "none",
-                                            "Sex" = "sex",
-                                            "Age group" = "age_group",
-                                            "Race" = "race",
-                                            "Hispanic status" = "hisp",
-                                            "Level of education" = "educ",
-                                            "Citizenship status" = "citizen",
-                                            "State" = "state"
+                                    wellPanel(
+                                        # Widget for selecting the variable to group by in the trend
+                                        # data.
+                                        selectInput(inputId = "trends_group_var",
+                                            label = "Group by:",
+                                            # The value of each choice is a variable name in the data
+                                            # set, except for ``none'', which corresponds to no
+                                            # grouping.
+                                            choices = list(
+                                                "None" = "none",
+                                                "Sex" = "sex",
+                                                "Age group" = "age_group",
+                                                "Race" = "race",
+                                                "Hispanic status" = "hisp",
+                                                "Level of education" = "educ",
+                                                "Citizenship status" = "citizen",
+                                                "State" = "state"
+                                            )
                                         )
                                     ),
-                                    
                                     # If selected, fix the vertical axis on each trend plot to be
                                     # from 0 to 1, inclusive.
                                     awesomeCheckbox(inputId = "trends_fixed_axis",
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
+                                    ),
+                                    
+                                    awesomeCheckbox(inputId = "trends_plot_difference",
+                                        label = "Plot the difference between two levels of a variable"
+                                    ),
+                                    
+                                    wellPanel(
+                                        selectInput(inputId = "trends_difference_var",
+                                            label = "Variable:",
+                                            choices = list(
+                                                #"None" = "none",
+                                                "Sex" = "sex",
+                                                "Age group" = "age_group",
+                                                "Race" = "race",
+                                                "Hispanic status" = "hisp",
+                                                "Level of education" = "educ",
+                                                "Citizenship status" = "citizen",
+                                                "State" = "state"
+                                            )
+                                        )
                                     )
                                 )
                             )

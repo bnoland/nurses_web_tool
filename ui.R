@@ -19,6 +19,10 @@ ui <- fluidPage(
             # Hack to ensure the checkboxes in the variable selection panel are properly aligned.
             tags$style(type = "text/css", "#selection-panel .awesome-checkbox label {width: 80%;}"),
             
+            # Hack to ensure that checkboxes in options tabs are properly aligned.
+            # TODO: Is this the right CSS class?
+            tags$style(type = "text/css", ".checkboxbs label {width: 80%;}"),
+            
             # TODO: Am I guaranteed to set the CSS id thought the ``id'' attribute?
             bsCollapse(id = "selection-panel",
                 # Year range selection.

@@ -46,6 +46,30 @@ trend_data <- function(nurses_subset, group_var, type) {
     trend_data
 }
 
+trend_diff_data <- function(nurses_subset, diff_var, diff_first, diff_second, type) {
+    trend_data <- nurses_subset %>% group_by(year)
+    
+    diff_var <- as.symbol(diff_var)
+    trend_data <- trend_data %>%
+        group_by(.dots = diff_var, add = TRUE)
+    
+    trend_data <- trend_data %>%
+        summarize(
+            prop = mean(member, na.rm = TRUE),
+            n = n()
+        )
+    
+    trend_data_first <- trend_data %>%
+        filter(eval(diff_var) == diff_first)
+    
+    trend_data_second <- trend_data %>%
+        filter(eval(diff_var) == diff_second)
+    
+    # TODO: Need to join these two data frames (by year?)
+    
+    #trend_data
+}
+
 # Plot union membership or union contract coverage over time.
 #   nurses_subset
 #       Subset of the data selected by the user.
@@ -209,6 +233,19 @@ server <- function(input, output, session) {
         diff_var <- eval(as.symbol(diff_var), envir = nurses)
         updateSelectInput(session, "trends_diff_first", choices = levels(diff_var))
         updateSelectInput(session, "trends_diff_second", choices = levels(diff_var))
+    })
+    
+    ## Testing. ##
+    observe({
+        if (input$trends_plot_diff) {
+            nurses_subset <- nurses_subset_selected()
+            diff_var <- input$trends_diff_var
+            diff_first <- input$trends_diff_first
+            diff_second <- input$trends_diff_second
+            diff_data <-
+                trend_diff_data(nurses_subset, diff_var, diff_first, diff_second, type = "membership")
+            print(diff_data)
+        }
     })
     
     # Renders the map showing union membership at the state-level.

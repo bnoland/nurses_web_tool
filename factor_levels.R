@@ -28,6 +28,13 @@ race_factor_levels <- function() {
     )
 }
 
+hispanic_factor_levels <- function() {
+    c(
+        "Hispanic",
+        "Non-Hispanic"
+    )
+}
+
 education_factor_levels <- function() {
     c(
         "No high school",

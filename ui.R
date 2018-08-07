@@ -3,12 +3,15 @@
 library(shiny)
 library(shinyBS)
 library(shinyWidgets)
+library(shinyjs)
 
 source("factor_levels.R")
 
 # User interface ------------------------------------------------------------------------------
 
 ui <- fluidPage(
+    useShinyjs(),
+    
     titlePanel("Nurses web tool"),
     
     sidebarLayout(
@@ -67,8 +70,10 @@ ui <- fluidPage(
                 bsCollapsePanel(title = "Hispanic status",
                     awesomeCheckboxGroup(inputId = "hisp_status_selection",
                         label = NULL,
-                        choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
-                        selected = c(TRUE, FALSE)
+                        #choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
+                        #selected = c(TRUE, FALSE)
+                        choices = hispanic_factor_levels(),
+                        selected = hispanic_factor_levels()
                     )
                 ),
                 
@@ -175,21 +180,21 @@ ui <- fluidPage(
                                             )
                                         )
                                     ),
+                                    
                                     # If selected, fix the vertical axis on each trend plot to be
                                     # from 0 to 1, inclusive.
                                     awesomeCheckbox(inputId = "trends_fixed_axis",
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     ),
                                     
-                                    awesomeCheckbox(inputId = "trends_plot_difference",
+                                    awesomeCheckbox(inputId = "trends_plot_diff",
                                         label = "Plot the difference between two levels of a variable"
                                     ),
                                     
                                     wellPanel(
-                                        selectInput(inputId = "trends_difference_var",
+                                        selectInput(inputId = "trends_diff_var",
                                             label = "Variable:",
                                             choices = list(
-                                                #"None" = "none",
                                                 "Sex" = "sex",
                                                 "Age group" = "age_group",
                                                 "Race" = "race",
@@ -198,6 +203,16 @@ ui <- fluidPage(
                                                 "Citizenship status" = "citizen",
                                                 "State" = "state"
                                             )
+                                        ),
+                                        
+                                        selectInput(inputId = "trends_diff_first",
+                                            label = "First",
+                                            choices = NULL
+                                        ),
+                                        
+                                        selectInput(inputId = "trends_diff_second",
+                                            label = "Second",
+                                            choices = NULL
                                         )
                                     )
                                 )

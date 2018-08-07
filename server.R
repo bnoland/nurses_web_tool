@@ -1,6 +1,7 @@
 # File for defining the server logic, as well as supporting functions.
 
 library(shiny)
+library(shinyjs)
 library(usmap)
 library(ggplot2)
 library(dplyr)
@@ -150,20 +151,19 @@ state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
 # Server logic --------------------------------------------------------------------------------
 
 # TODO: The server() function is too long -- may want to modularize in some way.
-server <- function(input, output) {
+server <- function(input, output, session) {
     # Returns the subset of the nurses data selected by the user.
     nurses_subset_selected <- reactive({
-        nurses %>%
-            filter(
-                year >= input$year_range[1], year <= input$year_range[2],
-                sex %in% input$sex_selection,
-                age_group %in% input$age_selection,
-                race %in% input$race_selection,
-                hisp %in% input$hisp_status_selection,
-                educ %in% input$educ_selection,
-                citizen %in% input$citizen_selection,
-                state %in% input$state_selection
-            )
+        nurses %>% filter(
+            year >= input$year_range[1], year <= input$year_range[2],
+            sex %in% input$sex_selection,
+            age_group %in% input$age_selection,
+            race %in% input$race_selection,
+            hisp %in% input$hisp_status_selection,
+            educ %in% input$educ_selection,
+            citizen %in% input$citizen_selection,
+            state %in% input$state_selection
+        )
     })
     
     # Renders the trend plot for union membership.
@@ -194,6 +194,21 @@ server <- function(input, output) {
         nurses_subset <- nurses_subset_selected()
         group_var <- input$trends_group_var
         trend_data(nurses_subset, group_var, type = "coverage")
+    })
+    
+    observe({
+        toggleState("trends_group_var", !input$trends_plot_diff)
+        
+        toggleState("trends_diff_var", input$trends_plot_diff)
+        toggleState("trends_diff_first", input$trends_plot_diff)
+        toggleState("trends_diff_second", input$trends_plot_diff)
+    })
+    
+    observe({
+        diff_var <- input$trends_diff_var
+        diff_var <- eval(as.symbol(diff_var), envir = nurses)
+        updateSelectInput(session, "trends_diff_first", choices = levels(diff_var))
+        updateSelectInput(session, "trends_diff_second", choices = levels(diff_var))
     })
     
     # Renders the map showing union membership at the state-level.

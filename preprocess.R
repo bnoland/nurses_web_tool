@@ -59,6 +59,20 @@ race_code <- function(ptdtrace) {
     })
 }
 
+# Code Hispanic status from the appropriate CPS variable.
+hispanic_code <- function(pehspnon) {
+    pehspnon %>% map_chr(function(x) {
+        if (is.na(x)) {
+            NA
+        } else if (x == 1) {
+            "Hispanic"
+        } else if (x == 2) {
+            "Non-Hispanic"
+        }
+        # TODO: Add assertion here.
+    })
+}
+
 # Code education level from the appropriate CPS variable.
 education_code <- function(peeduca) {
     peeduca %>% map_chr(function(x) {
@@ -127,7 +141,8 @@ nurses_preprocessed <- nurses %>%
         age = ifelse(is.na(peage), prtage, peage),
         age_group = age_group_code(age),
         race = race_code(ptdtrace),
-        hisp = (pehspnon == 1),
+        #hisp = (pehspnon == 1),
+        hisp = hispanic_code(pehspnon),
         educ = education_code(peeduca),
         citizen = citizenship_code(prcitshp),
         state = state_code(gestfips)

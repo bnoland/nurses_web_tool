@@ -160,6 +160,16 @@ ui <- fluidPage(
                             br(),
                             fluidRow(
                                 column(width = 12,
+                                    # If selected, fix the vertical axis on each trend plot to be
+                                    # from 0 to 1, inclusive.
+                                    awesomeCheckbox(inputId = "trends_fixed_axis",
+                                        label = "Fix vertical axes to be from 0 to 1, inclusive"
+                                    ),
+                                    
+                                    awesomeCheckbox(inputId = "trends_plot_diff",
+                                        label = "Plot the difference between two levels of a variable"
+                                    ),
+                                    
                                     wellPanel(
                                         # Widget for selecting the variable to group by in the trend
                                         # data.
@@ -181,16 +191,6 @@ ui <- fluidPage(
                                         )
                                     ),
                                     
-                                    # If selected, fix the vertical axis on each trend plot to be
-                                    # from 0 to 1, inclusive.
-                                    awesomeCheckbox(inputId = "trends_fixed_axis",
-                                        label = "Fix vertical axes to be from 0 to 1, inclusive"
-                                    ),
-                                    
-                                    awesomeCheckbox(inputId = "trends_plot_diff",
-                                        label = "Plot the difference between two levels of a variable"
-                                    ),
-                                    
                                     wellPanel(
                                         selectInput(inputId = "trends_diff_var",
                                             label = "Variable:",
@@ -206,12 +206,12 @@ ui <- fluidPage(
                                         ),
                                         
                                         selectInput(inputId = "trends_diff_first",
-                                            label = "First",
+                                            label = "First:",
                                             choices = NULL
                                         ),
                                         
                                         selectInput(inputId = "trends_diff_second",
-                                            label = "Second",
+                                            label = "Second:",
                                             choices = NULL
                                         )
                                     )

@@ -88,40 +88,62 @@ trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
         filter(eval(diff_var) == diff_levels[[2]])
     
     diff_data <- inner_join(diff_data_level1, diff_data_level2, by = "year",
-                            suffix = c(".first", ".second"))
+                            suffix = c(".level1", ".level2"))
     
     diff_data <- diff_data %>%
-        mutate(prop = prop.first - prop.second)
+        mutate(prop_diff = prop.level1 - prop.level2)
     
     diff_data
 }
 
-trend_data <- function(...) {
-    trend_grouped_data(...)
-}
-
-# Plots union membership or union contract coverage over time.
+# Plots union membership or union contract coverage over time, optionally grouped by a given
+# variable.
 #   nurses_subset
 #       Subset of the data selected by the user.
 #   group_var
 #       Variable to group by as a string. ``none'' if no grouping.
 #   fixed_axis
-#       Fix the vertical axis to be from 0 to 1, inclusive.
+#       If TRUE, fix the vertical axis to be from 0 to 1, inclusive.
 #   type
 #       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
 #       contract coverage rate).
 # TODO: Plot axis labels, etc. + plot styling.
-trend_plot <- function(nurses_subset, group_var, fixed_axis, type) {
-    trend_data <- trend_data(nurses_subset, group_var, type)
+trend_grouped_plot <- function(nurses_subset, group_var, fixed_axis, type) {
+    grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
     group_var <- as.symbol(group_var)
     # TODO: aes() vs aes_()?
     if (group_var != "none") {
-        p <- ggplot(trend_data,
+        p <- ggplot(grouped_data,
                     aes_(quote(year), quote(prop), color = group_var))
     } else {
-        p <- ggplot(trend_data, aes(year, prop))
+        p <- ggplot(grouped_data, aes(year, prop))
     }
+    
+    if (fixed_axis) {
+        p + geom_line() + coord_cartesian(ylim = c(0, 1))
+    } else {
+        p + geom_line() + expand_limits(y = 0)
+    }
+}
+
+# Plots the difference between either union membership or union coverage proportion for two levels
+# of a given variable.
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   diff_var
+#       The data will be restricted to two levels of this variable.
+#   diff_levels
+#       A vector of length two specifying the two levels of diff_var to consider.
+#   fixed_axis
+#       If TRUE, fix the vertical axis to be from 0 to 1, inclusive.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
+trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, fixed_axis, type) {
+    diff_data <- trend_diff_data(nurses_subset, diff_var, diff_levels, type)
+    
+    p <- ggplot(diff_data, aes(year, prop_diff))
     
     if (fixed_axis) {
         p + geom_line() + coord_cartesian(ylim = c(0, 1))
@@ -165,7 +187,8 @@ state_data <- function(nurses_subset, type) {
 #       If TRUE, display only the states selected by the user on the map; otherwise, show all
 #       states.
 #   fixed_scale
-#       Fix the color scale on the map to assign colors to all proportions from 0 to 1, inclusive.
+#       If TRUE, fix the color scale on the map to assign colors to all proportions from 0 to 1,
+#       inclusive.
 #   type
 #       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
 #       contract coverage rate).
@@ -223,31 +246,59 @@ server <- function(input, output, session) {
     # Renders the trend plot for union membership.
     output$members_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
-        group_var <- input$trends_group_var
         fixed_axis <- input$trends_fixed_axis
-        trend_plot(nurses_subset, group_var, fixed_axis, type = "membership")
+        
+        if (input$trends_plot_diff) {
+            diff_var <- input$trends_diff_var
+            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
+            trend_diff_plot(nurses_subset, diff_var, diff_levels, fixed_axis, type = "membership")
+        } else {
+            group_var <- input$trends_group_var
+            trend_grouped_plot(nurses_subset, group_var, fixed_axis, type = "membership")
+        }
     })
     
     # Renders the trend plot for union contract coverage.
     output$coverage_trend_plot <- renderPlot({
         nurses_subset <- nurses_subset_selected()
-        group_var <- input$trends_group_var
         fixed_axis <- input$trends_fixed_axis
-        trend_plot(nurses_subset, group_var, fixed_axis, type = "coverage")
+        
+        if (input$trends_plot_diff) {
+            diff_var <- input$trends_diff_var
+            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
+            trend_diff_plot(nurses_subset, diff_var, diff_levels, fixed_axis, type = "coverage")
+        } else {
+            group_var <- input$trends_group_var
+            trend_grouped_plot(nurses_subset, group_var, fixed_axis, type = "coverage")
+        }
     })
     
     # Renders the data table showing the union membership trend data.
     output$membership_trend_data <- renderDataTable({
         nurses_subset <- nurses_subset_selected()
-        group_var <- input$trends_group_var
-        trend_data(nurses_subset, group_var, type = "membership")
+        
+        if (input$trends_plot_diff) {
+            diff_var <- input$trends_diff_var
+            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
+            trend_diff_data(nurses_subset, diff_var, diff_levels, type = "membership")
+        } else {
+            group_var <- input$trends_group_var
+            trend_grouped_data(nurses_subset, group_var, type = "membership")
+        }
     })
     
     # Renders the data table showing the union contract coverage trend data.
     output$coverage_trend_data <- renderDataTable({
         nurses_subset <- nurses_subset_selected()
-        group_var <- input$trends_group_var
-        trend_data(nurses_subset, group_var, type = "coverage")
+        
+        if (input$trends_plot_diff) {
+            diff_var <- input$trends_diff_var
+            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
+            trend_diff_data(nurses_subset, diff_var, diff_levels, type = "coverage")
+        } else {
+            group_var <- input$trends_group_var
+            trend_grouped_data(nurses_subset, group_var, type = "coverage")
+        }
     })
     
     observe({
@@ -263,18 +314,6 @@ server <- function(input, output, session) {
         diff_var <- eval(as.symbol(diff_var), envir = nurses)
         updateSelectInput(session, "trends_diff_level1", choices = levels(diff_var))
         updateSelectInput(session, "trends_diff_level2", choices = levels(diff_var))
-    })
-    
-    ## Testing. ##
-    observe({
-        if (input$trends_plot_diff) {
-            nurses_subset <- nurses_subset_selected()
-            diff_var <- input$trends_diff_var
-            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
-            diff_data <-
-                trend_diff_data(nurses_subset, diff_var, diff_levels, type = "coverage")
-            print(diff_data)
-        }
     })
     
     # Renders the map showing union membership at the state-level.

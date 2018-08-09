@@ -205,12 +205,12 @@ ui <- fluidPage(
                                             )
                                         ),
                                         
-                                        selectInput(inputId = "trends_diff_first",
+                                        selectInput(inputId = "trends_diff_level1",
                                             label = "First:",
                                             choices = NULL
                                         ),
                                         
-                                        selectInput(inputId = "trends_diff_second",
+                                        selectInput(inputId = "trends_diff_level2",
                                             label = "Second:",
                                             choices = NULL
                                         )

@@ -1,4 +1,4 @@
-# File for defining the server logic, as well as supporting functions.
+# File for defining the server logic and supporting functions.
 
 library(shiny)
 library(shinyjs)
@@ -10,7 +10,8 @@ source("factor_levels.R")
 
 # Helper functions ----------------------------------------------------------------------------
 
-# Return union membership or union contract coverage trend data.
+# Returns union membership or union contract coverage trend data, optionally grouped by a given
+# variable.
 #   nurses_subset
 #       Subset of the data selected by the user.
 #   group_var
@@ -18,23 +19,23 @@ source("factor_levels.R")
 #   type
 #       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
 #       contract coverage rate).
-trend_data <- function(nurses_subset, group_var, type) {
-    trend_data <- nurses_subset %>% group_by(year)
+trend_grouped_data <- function(nurses_subset, group_var, type) {
+    grouped_data <- nurses_subset %>% group_by(year)
     
     group_var <- as.symbol(group_var)
     if (group_var != "none") {
-        trend_data <- trend_data %>%
+        grouped_data <- grouped_data %>%
             group_by(.dots = group_var, add = TRUE)
     }
     
     if (type == "membership") {
-        trend_data <- trend_data %>%
+        grouped_data <- grouped_data %>%
             summarize(
                 prop = mean(member, na.rm = TRUE),
                 n = n()
             )
     } else if (type == "coverage") {
-        trend_data <- trend_data %>%
+        grouped_data <- grouped_data %>%
             summarize(
                 prop = mean(covered, na.rm = TRUE),
                 n = n()
@@ -43,34 +44,63 @@ trend_data <- function(nurses_subset, group_var, type) {
         stop("Type must be either ``membership'' or ``coverage''.")
     }
     
-    trend_data
+    grouped_data
 }
 
-trend_diff_data <- function(nurses_subset, diff_var, diff_first, diff_second, type) {
-    trend_data <- nurses_subset %>% group_by(year)
+# Returns union membership or union contract coverage trend data for two levels of a given variable
+# with a column containing the difference between their two proportions.
+#   nurses_subset
+#       Subset of the data selected by the user.
+#   diff_var
+#       The data will be restricted to two levels of this variable.
+#   diff_levels
+#       A vector of length two specifying the two levels of diff_var to consider.
+#   type
+#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
+#       contract coverage rate).
+trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
+    diff_data <- nurses_subset %>% group_by(year)
     
     diff_var <- as.symbol(diff_var)
-    trend_data <- trend_data %>%
+    diff_data <- diff_data %>%
         group_by(.dots = diff_var, add = TRUE)
     
-    trend_data <- trend_data %>%
-        summarize(
-            prop = mean(member, na.rm = TRUE),
-            n = n()
-        )
+    if (type == "membership") {
+        diff_data <- diff_data %>%
+            summarize(
+                prop = mean(member, na.rm = TRUE),
+                n = n()
+            )
+    } else if (type == "coverage") {
+        diff_data <- diff_data %>%
+            summarize(
+                prop = mean(covered, na.rm = TRUE),
+                n = n()
+            )
+    } else {
+        stop("Type must be either ``membership'' or ``coverage''.")
+    }
     
-    trend_data_first <- trend_data %>%
-        filter(eval(diff_var) == diff_first)
+    diff_data_level1 <- diff_data %>%
+        filter(eval(diff_var) == diff_levels[[1]])
     
-    trend_data_second <- trend_data %>%
-        filter(eval(diff_var) == diff_second)
+    diff_data_level2 <- diff_data %>%
+        filter(eval(diff_var) == diff_levels[[2]])
     
-    # TODO: Need to join these two data frames (by year?)
+    diff_data <- inner_join(diff_data_level1, diff_data_level2, by = "year",
+                            suffix = c(".first", ".second"))
     
-    #trend_data
+    diff_data <- diff_data %>%
+        mutate(prop = prop.first - prop.second)
+    
+    diff_data
 }
 
-# Plot union membership or union contract coverage over time.
+trend_data <- function(...) {
+    trend_grouped_data(...)
+}
+
+# Plots union membership or union contract coverage over time.
 #   nurses_subset
 #       Subset of the data selected by the user.
 #   group_var
@@ -100,7 +130,7 @@ trend_plot <- function(nurses_subset, group_var, fixed_axis, type) {
     }
 }
 
-# Return state-level union membership or union contract coverage.
+# Returns state-level union membership or union contract coverage.
 #   nurses_subset
 #       Subset of the data selected by the user.
 #   type
@@ -128,7 +158,7 @@ state_data <- function(nurses_subset, type) {
     state_data
 }
 
-# Plot a chloropleth map showing state-level union membership or union contract coverage.
+# Plots a chloropleth map showing state-level union membership or union contract coverage.
 #   nurses_subset
 #       Subset of the data selected by the user.
 #   selected_states_only
@@ -224,15 +254,15 @@ server <- function(input, output, session) {
         toggleState("trends_group_var", !input$trends_plot_diff)
         
         toggleState("trends_diff_var", input$trends_plot_diff)
-        toggleState("trends_diff_first", input$trends_plot_diff)
-        toggleState("trends_diff_second", input$trends_plot_diff)
+        toggleState("trends_diff_level1", input$trends_plot_diff)
+        toggleState("trends_diff_level2", input$trends_plot_diff)
     })
     
     observe({
         diff_var <- input$trends_diff_var
         diff_var <- eval(as.symbol(diff_var), envir = nurses)
-        updateSelectInput(session, "trends_diff_first", choices = levels(diff_var))
-        updateSelectInput(session, "trends_diff_second", choices = levels(diff_var))
+        updateSelectInput(session, "trends_diff_level1", choices = levels(diff_var))
+        updateSelectInput(session, "trends_diff_level2", choices = levels(diff_var))
     })
     
     ## Testing. ##
@@ -240,10 +270,9 @@ server <- function(input, output, session) {
         if (input$trends_plot_diff) {
             nurses_subset <- nurses_subset_selected()
             diff_var <- input$trends_diff_var
-            diff_first <- input$trends_diff_first
-            diff_second <- input$trends_diff_second
+            diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
             diff_data <-
-                trend_diff_data(nurses_subset, diff_var, diff_first, diff_second, type = "membership")
+                trend_diff_data(nurses_subset, diff_var, diff_levels, type = "coverage")
             print(diff_data)
         }
     })

@@ -28,6 +28,8 @@ ui <- fluidPage(
             
             # TODO: Am I guaranteed to set the CSS id thought the ``id'' attribute?
             bsCollapse(id = "selection-panel",
+                multiple = TRUE,
+                
                 # Year range selection.
                 bsCollapsePanel(title = "Year range",
                     sliderInput(inputId = "year_range",

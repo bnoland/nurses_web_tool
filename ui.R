@@ -144,6 +144,8 @@ ui <- fluidPage(
                                     # Data table showing the data used to generate the union
                                     # membership trend plot.
                                     h3("Membership proportion"),
+                                    downloadButton("membership_trend_download"),
+                                    br(), br(),  # TODO: Hacky spacing.
                                     dataTableOutput("membership_trend_data")
                                 )
                             ),
@@ -152,6 +154,8 @@ ui <- fluidPage(
                                     # Data table showing the data used to generate the union
                                     # contract coverage trend plot.
                                     h3("Coverage proportion"),
+                                    downloadButton("coverage_trend_download"),
+                                    br(), br(),  # TODO: Hacky spacing.
                                     dataTableOutput("coverage_trend_data")
                                 )
                             )
@@ -159,7 +163,6 @@ ui <- fluidPage(
                         
                         # Panel for setting options related to the trend plots.
                         tabPanel(title = "Options",
-                            br(),
                             fluidRow(
                                 column(width = 12,
                                     # If selected, fix the vertical axis on each trend plot to be
@@ -254,6 +257,8 @@ ui <- fluidPage(
                                     # Data table showing the data used to generate the union
                                     # membership map.
                                     h3("Membership proportion"),
+                                    downloadButton("membership_state_download"),
+                                    br(), br(),  # TODO: Hacky spacing.
                                     dataTableOutput("membership_state_data")
                                 )
                             ),
@@ -262,6 +267,8 @@ ui <- fluidPage(
                                     # Data table showing the data used to generate the union
                                     # contract coverage map.
                                     h3("Coverage proportion"),
+                                    downloadButton("coverage_state_download"),
+                                    br(), br(),  # TODO: Hacky spacing.
                                     dataTableOutput("coverage_state_data")
                                 )
                             )

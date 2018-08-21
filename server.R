@@ -242,7 +242,7 @@ state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
     # TODO: What colors to use for the scale?
     plot_usmap(data = state_data, value = "prop", include = states) +
         scale_fill_gradient(low = "#56B1F7", high = "#132B43", na.value = "gray",
-                            name = legend_name, limits = c(0, scale_max), label = scales::comma) +
+                            name = legend_name, limits = c(0, scale_max), label = scales::percent) +
         theme(legend.position = "right")
 }
 

@@ -12,13 +12,6 @@ source("factor_levels.R")
 
 # Returns union membership or union contract coverage trend data, optionally grouped by a given
 # variable.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   group_var
-#       Variable to group by as a string. ``none'' if no grouping.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 trend_grouped_data <- function(nurses_subset, group_var, type) {
     grouped_data <- nurses_subset %>% group_by(year)
     
@@ -49,15 +42,6 @@ trend_grouped_data <- function(nurses_subset, group_var, type) {
 
 # Returns union membership or union contract coverage trend data for two levels of a given variable
 # with a column containing the difference between their two proportions.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   diff_var
-#       The data will be restricted to two levels of this variable.
-#   diff_levels
-#       A vector of length two specifying the two levels of diff_var to consider.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
     diff_data <- nurses_subset %>% group_by(year)
     
@@ -107,15 +91,6 @@ trend_data <- function(nurses_subset, plot_diff, group_var, diff_var, diff_level
 
 # Plots union membership or union contract coverage over time, optionally grouped by a given
 # variable.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   group_var
-#       Variable to group by as a string. ``none'' if no grouping.
-#   fixed_axis
-#       If TRUE, fix the vertical axis to be from 0 to 1, inclusive.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 # TODO: Plot axis labels, etc. + plot styling.
 trend_grouped_plot <- function(nurses_subset, group_var, fixed_axis, type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
@@ -138,17 +113,6 @@ trend_grouped_plot <- function(nurses_subset, group_var, fixed_axis, type) {
 
 # Plots the difference between either union membership or union coverage proportion for two levels
 # of a given variable.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   diff_var
-#       The data will be restricted to two levels of this variable.
-#   diff_levels
-#       A vector of length two specifying the two levels of diff_var to consider.
-#   fixed_axis
-#       If TRUE, fix the vertical axis to be from 0 to 1, inclusive.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, fixed_axis, type) {
     diff_data <- trend_diff_data(nurses_subset, diff_var, diff_levels, type)
     
@@ -174,11 +138,6 @@ trend_plot <- function(nurses_subset, plot_diff, group_var, diff_var, diff_level
 # Helper functions for state data and plots ---------------------------------------------------
 
 # Returns state-level union membership or union contract coverage.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 state_data <- function(nurses_subset, type) {
     state_data <- nurses_subset %>% group_by(state)
     
@@ -202,17 +161,6 @@ state_data <- function(nurses_subset, type) {
 }
 
 # Plots a chloropleth map showing state-level union membership or union contract coverage.
-#   nurses_subset
-#       Subset of the data selected by the user.
-#   selected_states_only
-#       If TRUE, display only the states selected by the user on the map; otherwise, show all
-#       states.
-#   fixed_scale
-#       If TRUE, fix the color scale on the map to assign colors to all proportions from 0 to 1,
-#       inclusive.
-#   type
-#       A string, either ``membership'' (for union membership rate) or ``coverage'' (for union
-#       contract coverage rate).
 # TODO: Map styling, etc.
 state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
     state_data <- state_data(nurses_subset, type)
@@ -225,7 +173,6 @@ state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
         stop("Type must be either ``membership'' or ``coverage''.")
     }
     
-    # TODO: Am I doing this right?
     states <- NULL
     if (selected_states_only)
         states <- state_data$state

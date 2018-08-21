@@ -72,8 +72,6 @@ ui <- fluidPage(
                 bsCollapsePanel(title = "Hispanic status",
                     awesomeCheckboxGroup(inputId = "hisp_status_selection",
                         label = NULL,
-                        #choices = c("Hispanic" = TRUE, "Non-Hispanic" = FALSE),
-                        #selected = c(TRUE, FALSE)
                         choices = hispanic_factor_levels(),
                         selected = hispanic_factor_levels()
                     )

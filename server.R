@@ -333,7 +333,22 @@ server <- function(input, output, session) {
         }
     )
     
-    # TODO: Add functionality for other download buttons.
+    # Download the union contract coverage data.
+    output$coverage_trend_download <- downloadHandler(
+        filename = "coverage_trend.csv",
+        content = function(file) {
+            data <- trend_data(
+                nurses_subset = nurses_subset_selected(),
+                plot_diff = input$trends_plot_diff,
+                group_var = input$trends_group_var,
+                diff_var = input$trends_diff_var,
+                diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
+                type = "coverage"
+            )
+            
+            write.csv(data, file)
+        }
+    )
     
     observe({
         toggleState("trends_group_var", !input$trends_plot_diff)
@@ -385,6 +400,32 @@ server <- function(input, output, session) {
             type = "coverage"
         )
     })
+    
+    # Download the state-level union membership data.
+    output$membership_state_download <- downloadHandler(
+        filename = "membership_state.csv",
+        content = function(file) {
+            data <- state_data(
+                nurses_subset = nurses_subset_selected(),
+                type = "membership"
+            )
+            
+            write.csv(data, file)
+        }
+    )
+    
+    # Download the state-level union contract coverage data.
+    output$coverage_state_download <- downloadHandler(
+        filename = "coverage_state.csv",
+        content = function(file) {
+            data <- state_data(
+                nurses_subset = nurses_subset_selected(),
+                type = "coverage"
+            )
+            
+            write.csv(data, file)
+        }
+    )
     
     # Renders the data table showing the subset of the nurses data selected by the user.
     output$nurses_subset_table <- renderDataTable(nurses_subset_selected())

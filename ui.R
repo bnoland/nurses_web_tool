@@ -16,6 +16,8 @@ ui <- fluidPage(
     
     sidebarLayout(
         sidebarPanel(
+            # TODO: Neaten up all this inline CSS. Also, maybe use shinyjs::inlineCSS()?
+            
             # Hack to force the slider input widget to only put tick marks at integer values.
             tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
             

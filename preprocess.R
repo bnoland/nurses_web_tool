@@ -1,8 +1,5 @@
 # Preprocess the raw CPS data for use by the app.
 
-# TODO: Note that, for the sake of posterity, this doesn't make use of any of the variables created
-# by Doug Kruse's script. In the future, it would probably be better to use the actual raw CPS data.
-
 library(readr)
 library(dplyr)
 library(purrr)
@@ -14,7 +11,7 @@ nurses <- read_csv("nurses.csv")
 
 # Do the preprocessing ------------------------------------------------------------------------
 
-# Code sex from the appropriate CPS variable.
+# Code sex from the CPS variable PESEX.
 sex_code <- function(pesex) {
     pesex %>% map_chr(function(x) {
         if (is.na(x)) {
@@ -23,8 +20,9 @@ sex_code <- function(pesex) {
             "Male"
         } else if (x == 2) {
             "Female"
+        } else {
+            stop("Miscoded CPS sex: ", x)
         }
-        # TODO: Add assertion here.
     })
 }
 
@@ -38,7 +36,7 @@ age_group_code <- function(age) {
     )
 }
 
-# Code race from the pertinent CPS variable.
+# Code race from the CPS variable PTDTRACE.
 race_code <- function(ptdtrace) {
     ptdtrace %>% map_chr(function(x) {
         if (is.na(x)) {
@@ -54,12 +52,13 @@ race_code <- function(ptdtrace) {
         } else if (x == 5) {
             "Hawaiian/Pacific Islander"
         } else {
+            # TODO: This is a catch-all. May want to detect miscodes in raw data.
             "Other"
         }
     })
 }
 
-# Code Hispanic status from the appropriate CPS variable.
+# Code Hispanic status from the CPS variable PEHSPNON.
 hispanic_code <- function(pehspnon) {
     pehspnon %>% map_chr(function(x) {
         if (is.na(x)) {
@@ -68,14 +67,16 @@ hispanic_code <- function(pehspnon) {
             "Hispanic"
         } else if (x == 2) {
             "Non-Hispanic"
+        } else {
+            stop("Miscoded CPS Hispanic status: ", x)
         }
-        # TODO: Add assertion here.
     })
 }
 
-# Code education level from the appropriate CPS variable.
+# Code education level from the CPS variable PEEDUCA.
 education_code <- function(peeduca) {
     peeduca %>% map_chr(function(x) {
+        # TODO: Some miscodes in the raw data might fall through the cracks here.
         if (is.na(x)) {
             NA
         } else if (x < 39) {
@@ -90,12 +91,13 @@ education_code <- function(peeduca) {
             "Bachelor's degree"
         } else if (x > 43) {
             "Graduate degree"
+        } else {
+            stop("Miscoded CPS education level: ", x)
         }
-        # TODO: Add assertion here.
     })
 }
 
-# Code citizenship status from the appropriate CPS variable.
+# Code citizenship status from the CPS variable PRCITSHP.
 citizenship_code <- function(prcitshp) {
     prcitshp %>% map_chr(function(x) {
         if (is.na(x)) {
@@ -106,25 +108,24 @@ citizenship_code <- function(prcitshp) {
             "Foreign-born, citizen"
         } else if (x == 5) {
             "Foreign-born, non-citizen"
+        } else {
+            stop("Miscoded CPS citizenship status: ", x)
         }
-        # TODO: Add assertion here.
     })
 }
 
-# Code state from appropriate CPS variable.
+# Code state from CPS variable GESTFIPS.
 state_code <- function(gestfips) {
     source("state_table.R", local = TRUE)
     
     gestfips %>% map_chr(function(x) {
-        if (is.na(x))
+        if (is.na(x)) {
             NA
-        else {
+        } else {
             key <- as.character(x)
             state <- state_table[[key]]
-            if (is_null(state)) {
-                # TODO: Put assertion here.
-            }
-            
+            if (is_null(state))
+                stop("Miscoded CPS state: ", x)
             state
         }
     })
@@ -141,7 +142,6 @@ nurses_preprocessed <- nurses %>%
         age = ifelse(is.na(peage), prtage, peage),
         age_group = age_group_code(age),
         race = race_code(ptdtrace),
-        #hisp = (pehspnon == 1),
         hisp = hispanic_code(pehspnon),
         educ = education_code(peeduca),
         citizen = citizenship_code(prcitshp),

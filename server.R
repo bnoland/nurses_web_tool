@@ -6,8 +6,6 @@ library(usmap)
 library(ggplot2)
 library(dplyr)
 
-source("factor_levels.R")
-
 # Helper functions for trend data and plots ---------------------------------------------------
 
 # Returns union membership or union contract coverage trend data, optionally grouped by a given

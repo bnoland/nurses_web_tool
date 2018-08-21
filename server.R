@@ -316,23 +316,24 @@ server <- function(input, output, session) {
         )
     })
     
+    # Download the union membership trend data.
     output$membership_trend_download <- downloadHandler(
-        filename = "data.csv",
+        filename = "membership_trend.csv",
         content = function(file) {
-            nurses_subset <- nurses_subset_selected()
-            
-            if (input$trends_plot_diff) {
-                diff_var <- input$trends_diff_var
-                diff_levels <- c(input$trends_diff_level1, input$trends_diff_level2)
-                data <- trend_diff_data(nurses_subset, diff_var, diff_levels, type = "membership")
-            } else {
-                group_var <- input$trends_group_var
-                data <- trend_grouped_data(nurses_subset, group_var, type = "membership")
-            }
+            data <- trend_data(
+                nurses_subset = nurses_subset_selected(),
+                plot_diff = input$trends_plot_diff,
+                group_var = input$trends_group_var,
+                diff_var = input$trends_diff_var,
+                diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
+                type = "membership"
+            )
             
             write.csv(data, file)
         }
     )
+    
+    # TODO: Add functionality for other download buttons.
     
     observe({
         toggleState("trends_group_var", !input$trends_plot_diff)

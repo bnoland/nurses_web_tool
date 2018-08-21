@@ -297,6 +297,7 @@ server <- function(input, output, session) {
         }
     )
     
+    # If difference plots are enabled, disable the grouping controls, and vice versa.
     observe({
         toggleState("trends_group_var", !input$trends_plot_diff)
         
@@ -305,6 +306,8 @@ server <- function(input, output, session) {
         toggleState("trends_diff_level2", input$trends_plot_diff)
     })
     
+    # Ensure that the variable level selections in the trend difference controls correspond to the
+    # variable selected.
     observe({
         diff_var <- input$trends_diff_var
         diff_var <- eval(as.symbol(diff_var), envir = nurses)
@@ -376,4 +379,13 @@ server <- function(input, output, session) {
     
     # Renders the data table showing the subset of the nurses data selected by the user.
     output$nurses_subset_table <- renderDataTable(nurses_subset_selected())
+    
+    # Download the subset of the nurses data selected by the user.
+    output$nurses_subset_download <- downloadHandler(
+        filename = "nurses_selected.csv",
+        content = function(file) {
+            data <- nurses_subset_selected()
+            write.csv(data, file)
+        }
+    )
 }

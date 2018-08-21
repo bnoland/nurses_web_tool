@@ -299,8 +299,10 @@ ui <- fluidPage(
                 # Data viewer panel.
                 tabPanel(title = "Data",
                     fluidRow(
-                        # Data table showing the subset of the nurses data selected by the user.
                         column(width = 12,
+                            h3("Selected data"),
+                            downloadButton("nurses_subset_download"),
+                            br(), br(),  # TODO: Hacky spacing.
                             dataTableOutput("nurses_subset_table")
                         )
                     )

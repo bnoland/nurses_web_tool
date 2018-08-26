@@ -6,7 +6,23 @@ library(usmap)
 library(ggplot2)
 library(dplyr)
 
-# Helper functions for trend data and plots ---------------------------------------------------
+# Computes and returns union membership or union contract coverage proportions from the given
+# (pre-grouped) data.
+with_proportions <- function(data, type) {
+    if (type == "membership") {
+        data %>% summarize(
+            prop = mean(member, na.rm = TRUE),
+            n = n()
+        )
+    } else if (type == "coverage") {
+        data %>% summarize(
+            prop = mean(covered, na.rm = TRUE),
+            n = n()
+        )
+    } else {
+        stop("Type must be either ``membership'' or ``coverage''.")
+    }
+}
 
 # Returns union membership or union contract coverage trend data, optionally grouped by a given
 # variable.
@@ -19,23 +35,7 @@ trend_grouped_data <- function(nurses_subset, group_var, type) {
             group_by(.dots = group_var, add = TRUE)
     }
     
-    if (type == "membership") {
-        grouped_data <- grouped_data %>%
-            summarize(
-                prop = mean(member, na.rm = TRUE),
-                n = n()
-            )
-    } else if (type == "coverage") {
-        grouped_data <- grouped_data %>%
-            summarize(
-                prop = mean(covered, na.rm = TRUE),
-                n = n()
-            )
-    } else {
-        stop("Type must be either ``membership'' or ``coverage''.")
-    }
-    
-    grouped_data
+    with_proportions(grouped_data, type)
 }
 
 # Returns union membership or union contract coverage trend data for two levels of a given variable
@@ -47,21 +47,7 @@ trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
     diff_data <- diff_data %>%
         group_by(.dots = diff_var, add = TRUE)
     
-    if (type == "membership") {
-        diff_data <- diff_data %>%
-            summarize(
-                prop = mean(member, na.rm = TRUE),
-                n = n()
-            )
-    } else if (type == "coverage") {
-        diff_data <- diff_data %>%
-            summarize(
-                prop = mean(covered, na.rm = TRUE),
-                n = n()
-            )
-    } else {
-        stop("Type must be either ``membership'' or ``coverage''.")
-    }
+    diff_data <- with_proportions(diff_data, type)
     
     diff_data_level1 <- diff_data %>%
         filter(eval(diff_var) == diff_levels[[1]])
@@ -89,86 +75,72 @@ trend_data <- function(nurses_subset, plot_diff, group_var, diff_var, diff_level
 
 # Plots union membership or union contract coverage over time, optionally grouped by a given
 # variable.
-# TODO: Plot axis labels, etc. + plot styling.
-trend_grouped_plot <- function(nurses_subset, group_var, fixed_axis, type) {
+trend_grouped_plot <- function(nurses_subset, group_var, type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
-    group_var <- as.symbol(group_var)
-    # TODO: Make sure quasiquotation is being used correctly here...
     if (group_var != "none") {
-        p <- ggplot(grouped_data, aes(year, prop, color = !!group_var))
+        legend_name <- switch(group_var,
+            "sex" = "Sex",
+            "age_group" = "Age group",
+            "race" = "Race",
+            "hisp" = "Hispanic status",
+            "educ" = "Level of education",
+            "citizen" = "Citizenship status",
+            "state" = "State"
+        )
+        
+        group_var <- as.symbol(group_var)
+        
+        # TODO: Make sure quasiquotation is being used correctly here...
+        # TODO: Use viridis color palette?
+        ggplot(grouped_data, aes(year, prop, color = !!group_var)) +
+            geom_line(size = 1) +
+            #viridis::scale_color_viridis(name = legend_name, discrete = TRUE)
+            scale_color_discrete(name = legend_name)
     } else {
-        p <- ggplot(grouped_data, aes(year, prop))
-    }
-    
-    if (fixed_axis) {
-        p + geom_line() + coord_cartesian(ylim = c(0, 1))
-    } else {
-        p + geom_line() + expand_limits(y = 0)
+        ggplot(grouped_data, aes(year, prop)) +
+            geom_line(size = 1)
     }
 }
 
 # Plots the difference between either union membership or union coverage proportion for two levels
 # of a given variable.
-trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, fixed_axis, type) {
+trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, type) {
     diff_data <- trend_diff_data(nurses_subset, diff_var, diff_levels, type)
     
-    p <- ggplot(diff_data, aes(year, prop_diff))
-    
-    if (fixed_axis) {
-        p + geom_line() + coord_cartesian(ylim = c(0, 1))
-    } else {
-        p + geom_line() + expand_limits(y = 0)
-    }
+    ggplot(diff_data, aes(year, prop_diff)) +
+        geom_line(size = 1)
 }
 
 # Simple wrapper around trend_grouped_plot() and trend_diff_plot().
-trend_plot <- function(nurses_subset, plot_diff, group_var, diff_var, diff_levels, fixed_axis,
-                       type) {
+trend_plot <- function(nurses_subset, plot_diff, group_var, diff_var, diff_levels,
+                       fixed_axis, type) {
     if (plot_diff) {
-        trend_diff_plot(nurses_subset, diff_var, diff_levels, fixed_axis, type)
+        p <- trend_diff_plot(nurses_subset, diff_var, diff_levels, type)
     } else {
-        trend_grouped_plot(nurses_subset, group_var, fixed_axis, type)
+        p <- trend_grouped_plot(nurses_subset, group_var, type)
+    }
+    
+    p <- p + labs(x = "Year", y = "Proportion")
+    
+    if (fixed_axis) {
+        p + coord_cartesian(ylim = c(0, 1))
+    } else {
+        p + expand_limits(y = 0)
     }
 }
-
-# Helper functions for state data and plots ---------------------------------------------------
 
 # Returns state-level union membership or union contract coverage.
 state_data <- function(nurses_subset, type) {
     state_data <- nurses_subset %>% group_by(state)
     
-    if (type == "membership") {
-        state_data <- state_data %>%
-            summarize(
-                prop = mean(member, na.rm = TRUE),
-                n = n()
-            )
-    } else if (type == "coverage") {
-        state_data <- state_data %>%
-            summarize(
-                prop = mean(covered, na.rm = TRUE),
-                n = n()
-            )
-    } else {
-        stop("Type must be either ``membership'' or ``coverage''.")
-    }
-    
-    state_data
+    with_proportions(state_data, type)
 }
 
 # Plots a chloropleth map showing state-level union membership or union contract coverage.
 # TODO: Map styling, etc.
 state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
     state_data <- state_data(nurses_subset, type)
-    
-    if (type == "membership") {
-        legend_name <- "Proportion members"
-    } else if (type == "coverage") {
-        legend_name <- "Proportion covered"
-    } else {
-        stop("Type must be either ``membership'' or ``coverage''.")
-    }
     
     states <- NULL
     if (selected_states_only) {
@@ -191,7 +163,7 @@ state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
         scale_fill_gradient(
             low = "#56B1F7", high = "#132B43",
             na.value = "gray",
-            name = legend_name,
+            name = "Proportion",
             limits = c(0, scale_max),
             label = scales::percent
         ) +

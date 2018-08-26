@@ -117,14 +117,14 @@ ui <- fluidPage(
                             fluidRow(
                                 column(width = 12,
                                     # Trend plot for union membership coverage.
-                                    h3("Membership proportion"),
+                                    h3("Union membership proportion"),
                                     plotOutput("members_trend_plot")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
                                     # Trend plot for union contract coverage.
-                                    h3("Coverage proportion"),
+                                    h3("Union contract coverage proportion"),
                                     plotOutput("coverage_trend_plot")
                                 )
                             )
@@ -230,14 +230,14 @@ ui <- fluidPage(
                             fluidRow(
                                 column(width = 12,
                                     # Map showing union membership per state.
-                                    h3("Membership proportion"),
+                                    h3("Union membership proportion"),
                                     plotOutput("membership_state_map")
                                 )
                             ),
                             fluidRow(
                                 column(width = 12,
                                     # Map showing union contract coverage per state.
-                                    h3("Coverage proportion"),
+                                    h3("Union contract coverage proportion"),
                                     plotOutput("coverage_state_map")
                                 )
                             )

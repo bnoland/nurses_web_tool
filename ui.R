@@ -4,32 +4,25 @@ library(shiny)
 library(shinyBS)
 library(shinyWidgets)
 library(shinyjs)
+library(shinythemes)
 
 source("factor_levels.R")
 
 # User interface ------------------------------------------------------------------------------
 
 ui <- fluidPage(
+    theme = shinytheme("readable"),
+    
     useShinyjs(),
     
     titlePanel("Nurses web tool"),
     
     sidebarLayout(
         sidebarPanel(
-            # TODO: Neaten up all this inline CSS. Also, maybe use shinyjs::inlineCSS()?
-            
             # Hack to force the slider input widget to only put tick marks at integer values.
             tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
             
-            # Hack to ensure the checkboxes in the variable selection panel are properly aligned.
-            tags$style(type = "text/css", "#selection-panel .awesome-checkbox label {width: 80%;}"),
-            
-            # Hack to ensure that checkboxes in options tabs are properly aligned.
-            # TODO: Is this the right CSS class?
-            tags$style(type = "text/css", ".checkboxbs label {width: 80%;}"),
-            
-            # TODO: Am I guaranteed to set the CSS id thought the ``id'' attribute?
-            bsCollapse(id = "selection-panel",
+            bsCollapse(
                 multiple = TRUE,
                 
                 # Year range selection.
@@ -45,7 +38,7 @@ ui <- fluidPage(
                 
                 # Sex selection.
                 bsCollapsePanel(title = "Sex",
-                    awesomeCheckboxGroup(inputId = "sex_selection",
+                    checkboxGroupInput(inputId = "sex_selection",
                         label = NULL,
                         choices = sex_factor_levels(),
                         selected = sex_factor_levels()
@@ -54,7 +47,7 @@ ui <- fluidPage(
                 
                 # Age group selection.
                 bsCollapsePanel(title = "Age group",
-                    awesomeCheckboxGroup(inputId = "age_selection",
+                    checkboxGroupInput(inputId = "age_selection",
                         label = NULL,
                         choices = age_group_factor_levels(),
                         selected = age_group_factor_levels()
@@ -63,7 +56,7 @@ ui <- fluidPage(
                 
                 # Race selection.
                 bsCollapsePanel(title = "Race",
-                    awesomeCheckboxGroup(inputId = "race_selection",
+                    checkboxGroupInput(inputId = "race_selection",
                         label = NULL,
                         choices = race_factor_levels(),
                         selected = race_factor_levels()
@@ -72,7 +65,7 @@ ui <- fluidPage(
                 
                 # Hispanic status selection.
                 bsCollapsePanel(title = "Hispanic status",
-                    awesomeCheckboxGroup(inputId = "hisp_status_selection",
+                    checkboxGroupInput(inputId = "hisp_status_selection",
                         label = NULL,
                         choices = hispanic_factor_levels(),
                         selected = hispanic_factor_levels()
@@ -81,7 +74,7 @@ ui <- fluidPage(
                 
                 # Education level selection.
                 bsCollapsePanel(title = "Level of education",
-                    awesomeCheckboxGroup(inputId = "educ_selection",
+                    checkboxGroupInput(inputId = "educ_selection",
                         label = NULL,
                         choices = education_factor_levels(),
                         selected = education_factor_levels()
@@ -90,7 +83,7 @@ ui <- fluidPage(
                 
                 # Citizenship status selection.
                 bsCollapsePanel(title = "Citizenship status",
-                    awesomeCheckboxGroup(inputId = "citizen_selection",
+                    checkboxGroupInput(inputId = "citizen_selection",
                         label = NULL,
                         choices = citizenship_factor_levels(),
                         selected = citizenship_factor_levels()
@@ -167,11 +160,11 @@ ui <- fluidPage(
                                 column(width = 12,
                                     # If selected, fix the vertical axis on each trend plot to be
                                     # from 0 to 1, inclusive.
-                                    awesomeCheckbox(inputId = "trends_fixed_axis",
+                                    checkboxInput(inputId = "trends_fixed_axis",
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     ),
                                     
-                                    awesomeCheckbox(inputId = "trends_plot_diff",
+                                    checkboxInput(inputId = "trends_plot_diff",
                                         label = "Plot the difference between two levels of a variable"
                                     ),
                                     
@@ -280,13 +273,13 @@ ui <- fluidPage(
                                 column(width = 12,
                                     # If selected, show only the states selected by the user in the
                                     # chloropleth maps.
-                                    awesomeCheckbox(inputId = "selected_states_only",
+                                    checkboxInput(inputId = "selected_states_only",
                                         label = "Show selected states only"
                                     ),
                                     
                                     # If selected, fix the color scale on the maps to assign colors
                                     # to all proportions from 0 to 1, inclusive.
-                                    awesomeCheckbox(inputId = "maps_fixed_scale",
+                                    checkboxInput(inputId = "maps_fixed_scale",
                                         # TODO: Better label.
                                         label = "Fix the color scale on the chloropleth maps"
                                     )

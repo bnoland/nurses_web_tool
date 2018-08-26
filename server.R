@@ -94,10 +94,9 @@ trend_grouped_plot <- function(nurses_subset, group_var, fixed_axis, type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
     group_var <- as.symbol(group_var)
-    # TODO: aes() vs aes_()?
+    # TODO: Make sure quasiquotation is being used correctly here...
     if (group_var != "none") {
-        p <- ggplot(grouped_data,
-                    aes_(quote(year), quote(prop), color = group_var))
+        p <- ggplot(grouped_data, aes(year, prop, color = !!group_var))
     } else {
         p <- ggplot(grouped_data, aes(year, prop))
     }
@@ -172,17 +171,20 @@ state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
     }
     
     states <- NULL
-    if (selected_states_only)
+    if (selected_states_only) {
         states <- state_data$state
+    }
     
     scale_max <- NA
-    if (fixed_scale)
+    if (fixed_scale) {
         scale_max <- 1
+    }
     
     # When no states are selected, ggplot can't infer the scale limits from the data, so we have
     # to set it to some number.
-    if (length(state_data$state) == 0)
+    if (length(state_data$state) == 0) {
         scale_max <- 1
+    }
     
     # TODO: What colors to use for the scale?
     plot_usmap(data = state_data, value = "prop", include = states) +

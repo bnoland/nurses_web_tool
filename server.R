@@ -123,6 +123,11 @@ trend_plot <- function(nurses_subset, plot_diff, group_var, diff_var, diff_level
     
     p <- p + labs(x = "Year", y = "Proportion")
     
+    # Ensure that every year in the selected data is marked on the horizontal axis.
+    start_year <- min(nurses_subset$year)
+    end_year <- max(nurses_subset$year)
+    p <- p + scale_x_continuous(breaks = start_year:end_year)
+    
     if (fixed_axis) {
         p + coord_cartesian(ylim = c(0, 1))
     } else {

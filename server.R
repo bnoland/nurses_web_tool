@@ -258,7 +258,7 @@ server <- function(input, output, session) {
                 type = "membership"
             )
             
-            write.csv(data, file)
+            write_csv(data, file)
         }
     )
     
@@ -275,7 +275,7 @@ server <- function(input, output, session) {
                 type = "coverage"
             )
             
-            write.csv(data, file)
+            write_csv(data, file)
         }
     )
     
@@ -342,7 +342,7 @@ server <- function(input, output, session) {
                 type = "membership"
             )
             
-            write.csv(data, file)
+            write_csv(data, file)
         }
     )
     
@@ -355,7 +355,7 @@ server <- function(input, output, session) {
                 type = "coverage"
             )
             
-            write.csv(data, file)
+            write_csv(data, file)
         }
     )
     
@@ -367,7 +367,7 @@ server <- function(input, output, session) {
         filename = "nurses_selected.csv",
         content = function(file) {
             data <- nurses_subset_selected()
-            write.csv(data, file)
+            write_csv(data, file)
         }
     )
 }

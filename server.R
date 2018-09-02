@@ -26,7 +26,7 @@ with_proportions <- function(data, type) {
 
 # Returns union membership or union contract coverage trend data, optionally grouped by a given
 # variable.
-trend_grouped_data <- function(nurses_subset, group_var, type) {
+trend_grouped_data <- function(nurses_subset, group_var = "none", type) {
     grouped_data <- nurses_subset %>% group_by(year)
     
     group_var <- as.symbol(group_var)
@@ -65,7 +65,8 @@ trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
 }
 
 # Simple wrapper around trend_grouped_data() and trend_diff_data().
-trend_data <- function(nurses_subset, plot_diff, group_var, diff_var, diff_levels, type) {
+trend_data <- function(nurses_subset, plot_diff = FALSE, group_var = "none", diff_var = NULL,
+                       diff_levels = NULL, type) {
     if (plot_diff) {
         trend_diff_data(nurses_subset, diff_var, diff_levels, type)
     } else {
@@ -75,7 +76,7 @@ trend_data <- function(nurses_subset, plot_diff, group_var, diff_var, diff_level
 
 # Plots union membership or union contract coverage over time, optionally grouped by a given
 # variable.
-trend_grouped_plot <- function(nurses_subset, group_var, type) {
+trend_grouped_plot <- function(nurses_subset, group_var = "none", type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
     if (group_var != "none") {
@@ -113,8 +114,8 @@ trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, type) {
 }
 
 # Simple wrapper around trend_grouped_plot() and trend_diff_plot().
-trend_plot <- function(nurses_subset, plot_diff, group_var, diff_var, diff_levels,
-                       fixed_axis, type) {
+trend_plot <- function(nurses_subset, plot_diff = FALSE, group_var = "none", diff_var = NULL,
+                       diff_levels = NULL, fixed_axis = FALSE, type) {
     if (plot_diff) {
         p <- trend_diff_plot(nurses_subset, diff_var, diff_levels, type)
     } else {
@@ -144,7 +145,7 @@ state_data <- function(nurses_subset, type) {
 
 # Plots a chloropleth map showing state-level union membership or union contract coverage.
 # TODO: Map styling, etc.
-state_map <- function(nurses_subset, selected_states_only, fixed_scale, type) {
+state_map <- function(nurses_subset, selected_states_only = FALSE, fixed_scale = FALSE, type) {
     state_data <- state_data(nurses_subset, type)
     
     states <- NULL

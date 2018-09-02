@@ -4,6 +4,8 @@ library(dplyr)
 source("../global.R", chdir = TRUE)
 source("../server.R", chdir = TRUE)
 
+# TODO: Test on random subset of the full dataset?
+
 test_that("Trend grouped data", {
     expect_grouped_data_equal <- function(nurses_subset, group_var, type) {
         actual_data <- trend_data(

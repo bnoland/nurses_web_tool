@@ -149,20 +149,17 @@ state_map <- function(nurses_subset, selected_states_only = FALSE, fixed_scale =
     state_data <- state_data(nurses_subset, type)
     
     states <- NULL
-    if (selected_states_only) {
+    if (selected_states_only)
         states <- state_data$state
-    }
     
     scale_max <- NA
-    if (fixed_scale) {
+    if (fixed_scale)
         scale_max <- 1
-    }
     
     # When no states are selected, ggplot can't infer the scale limits from the data, so we have
     # to set it to some number.
-    if (length(state_data$state) == 0) {
+    if (length(state_data$state) == 0)
         scale_max <- 1
-    }
     
     # TODO: What colors to use for the scale?
     plot_usmap(data = state_data, value = "prop", include = states) +

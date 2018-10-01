@@ -11,12 +11,14 @@ library(dplyr)
 with_proportions <- function(data, type) {
     if (type == "membership") {
         data %>% summarize(
-            prop = mean(member, na.rm = TRUE),
+            #prop = mean(member, na.rm = TRUE),
+            prop = sum(member * weight) / sum(weight),
             n = n()
         )
     } else if (type == "coverage") {
         data %>% summarize(
-            prop = mean(covered, na.rm = TRUE),
+            #prop = mean(covered, na.rm = TRUE),
+            prop = sum(covered * weight) / sum(weight),
             n = n()
         )
     } else {

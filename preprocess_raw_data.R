@@ -151,6 +151,13 @@ nurses_preprocessed <- nurses_raw %>%
     ) %>%
     filter(age >= 16)
 
+# Sanity check for missing values.
+for (name in names(nurses_preprocessed)) {
+    col <- nurses_preprocessed[[name]]
+    if (sum(is.na(col)) > 0)
+        warning("Column ", name, " contains missing values")
+}
+
 # Write the preprocessed data to disk ---------------------------------------------------------
 
 write_csv(nurses_preprocessed, "nurses_preprocessed.csv")

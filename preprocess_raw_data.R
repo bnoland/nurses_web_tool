@@ -145,7 +145,9 @@ nurses_preprocessed <- nurses_raw %>%
         hisp = hispanic_code(pehspnon),
         educ = education_code(peeduca),
         citizen = citizenship_code(prcitshp),
-        state = state_code(gestfips)
+        state = state_code(gestfips),
+        # TODO: Proper weight computation?
+        weight = pworwgt / 10
     ) %>%
     filter(age >= 16)
 

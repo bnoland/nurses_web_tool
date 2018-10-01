@@ -18,7 +18,8 @@ nurses <- read_csv("nurses_preprocessed.csv",
         hisp = col_factor(levels = hispanic_factor_levels()),
         educ = col_factor(levels = education_factor_levels()),
         citizen = col_factor(levels = citizenship_factor_levels()),
-        state = col_factor(levels = state_factor_levels())
+        state = col_factor(levels = state_factor_levels()),
+        weight = col_double()
     )
 )
 

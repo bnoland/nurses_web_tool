@@ -5,3 +5,9 @@
 
 rsconnect
 orgees20092017.rdata
+
+*.aux
+*.log
+*.gz
+
+*~

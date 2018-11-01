@@ -166,6 +166,11 @@ ui <- fluidPage(
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     ),
                                     
+                                    # If checked, use the viridis color palette for grouped plots.
+                                    checkboxInput(inputId = "trends_use_viridis",
+                                        label = "Use viridis color palette for grouped plots"
+                                    ),
+                                    
                                     # Plot type selection.
                                     radioButtons(inputId = "trend_plot_type",
                                         label = "Plot type",

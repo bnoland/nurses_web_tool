@@ -78,7 +78,7 @@ trend_data <- function(nurses_subset, plot_type, group_var = "none", diff_var = 
 
 # Plots union membership or union contract coverage over time, optionally grouped by a given
 # variable.
-trend_grouped_plot <- function(nurses_subset, group_var = "none", type) {
+trend_grouped_plot <- function(nurses_subset, group_var = "none", use_viridis = FALSE, type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
     if (group_var != "none") {
@@ -94,12 +94,13 @@ trend_grouped_plot <- function(nurses_subset, group_var = "none", type) {
         
         group_var <- as.symbol(group_var)
         
-        # TODO: Make sure quasiquotation is being used correctly here...
-        # TODO: Use viridis color palette?
-        ggplot(grouped_data, aes(year, prop, color = !!group_var)) +
-            geom_line(size = 1) +
-            #viridis::scale_color_viridis(name = legend_name, discrete = TRUE)
-            scale_color_discrete(name = legend_name)
+        p <- ggplot(grouped_data, aes(year, prop, color = !!group_var)) +
+            geom_line(size = 1)
+        if (use_viridis) {
+            p + viridis::scale_color_viridis(name = legend_name, discrete = TRUE)
+        } else {
+            p + scale_color_discrete(name = legend_name)
+        }
     } else {
         ggplot(grouped_data, aes(year, prop)) +
             geom_line(size = 1)
@@ -117,9 +118,9 @@ trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, type) {
 
 # Simple wrapper around trend_grouped_plot() and trend_diff_plot().
 trend_plot <- function(nurses_subset, plot_type, group_var = "none", diff_var = NULL,
-                       diff_levels = NULL, fixed_axis = FALSE, type) {
+                       diff_levels = NULL, fixed_axis = FALSE, use_viridis = FALSE, type) {
     if (plot_type == "grouped") {
-        p <- trend_grouped_plot(nurses_subset, group_var, type)
+        p <- trend_grouped_plot(nurses_subset, group_var, use_viridis, type)
     } else if (plot_type == "diff") {
         p <- trend_diff_plot(nurses_subset, diff_var, diff_levels, type)
     } else {
@@ -152,7 +153,6 @@ state_data <- function(nurses_subset, type) {
 }
 
 # Plots a chloropleth map showing state-level union membership or union contract coverage.
-# TODO: Map styling, etc.
 state_map <- function(nurses_subset, selected_states_only = FALSE, fixed_scale = FALSE, type) {
     state_data <- state_data(nurses_subset, type)
     
@@ -169,7 +169,6 @@ state_map <- function(nurses_subset, selected_states_only = FALSE, fixed_scale =
     if (length(state_data$state) == 0)
         scale_max <- 1
     
-    # TODO: What colors to use for the scale?
     plot_usmap(data = state_data, value = "prop", include = states) +
         scale_fill_gradient(
             low = "#56B1F7", high = "#132B43",
@@ -210,6 +209,7 @@ server <- function(input, output, session) {
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
             fixed_axis = input$trends_fixed_axis,
+            use_viridis = input$trends_use_viridis,
             type = "membership"
         )
     })
@@ -223,6 +223,7 @@ server <- function(input, output, session) {
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
             fixed_axis = input$trends_fixed_axis,
+            use_viridis = input$trends_use_viridis,
             type = "coverage"
         )
     })

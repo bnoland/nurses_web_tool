@@ -65,12 +65,14 @@ trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
 }
 
 # Simple wrapper around trend_grouped_data() and trend_diff_data().
-trend_data <- function(nurses_subset, plot_diff = FALSE, group_var = "none", diff_var = NULL,
+trend_data <- function(nurses_subset, plot_type, group_var = "none", diff_var = NULL,
                        diff_levels = NULL, type) {
-    if (plot_diff) {
+    if (plot_type == "grouped") {
+        trend_grouped_data(nurses_subset, group_var, type)
+    } else if (plot_type == "diff") {
         trend_diff_data(nurses_subset, diff_var, diff_levels, type)
     } else {
-        trend_grouped_data(nurses_subset, group_var, type)
+        stop("Plot type must be either ``grouped'' or ``diff''.")
     }
 }
 
@@ -114,12 +116,14 @@ trend_diff_plot <- function(nurses_subset, diff_var, diff_levels, type) {
 }
 
 # Simple wrapper around trend_grouped_plot() and trend_diff_plot().
-trend_plot <- function(nurses_subset, plot_diff = FALSE, group_var = "none", diff_var = NULL,
+trend_plot <- function(nurses_subset, plot_type, group_var = "none", diff_var = NULL,
                        diff_levels = NULL, fixed_axis = FALSE, type) {
-    if (plot_diff) {
+    if (plot_type == "grouped") {
+        p <- trend_grouped_plot(nurses_subset, group_var, type)
+    } else if (plot_type == "diff") {
         p <- trend_diff_plot(nurses_subset, diff_var, diff_levels, type)
     } else {
-        p <- trend_grouped_plot(nurses_subset, group_var, type)
+        stop("Plot type must be either ``grouped'' or ``diff''.")
     }
     
     p <- p + labs(x = "Year", y = "Proportion")
@@ -201,7 +205,7 @@ server <- function(input, output, session) {
     output$members_trend_plot <- renderPlot({
         trend_plot(
             nurses_subset = nurses_subset_selected(),
-            plot_diff = input$trends_plot_diff,
+            plot_type = input$trend_plot_type,
             group_var = input$trends_group_var,
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -214,7 +218,7 @@ server <- function(input, output, session) {
     output$coverage_trend_plot <- renderPlot({
         trend_plot(
             nurses_subset = nurses_subset_selected(),
-            plot_diff = input$trends_plot_diff,
+            plot_type = input$trend_plot_type,
             group_var = input$trends_group_var,
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -227,7 +231,7 @@ server <- function(input, output, session) {
     output$membership_trend_data <- renderDataTable({
         trend_data(
             nurses_subset = nurses_subset_selected(),
-            plot_diff = input$trends_plot_diff,
+            plot_type = input$trend_plot_type,
             group_var = input$trends_group_var,
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -239,7 +243,7 @@ server <- function(input, output, session) {
     output$coverage_trend_data <- renderDataTable({
         trend_data(
             nurses_subset = nurses_subset_selected(),
-            plot_diff = input$trends_plot_diff,
+            plot_type = input$trend_plot_type,
             group_var = input$trends_group_var,
             diff_var = input$trends_diff_var,
             diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -253,7 +257,7 @@ server <- function(input, output, session) {
         content = function(file) {
             data <- trend_data(
                 nurses_subset = nurses_subset_selected(),
-                plot_diff = input$trends_plot_diff,
+                plot_type = input$trend_plot_type,
                 group_var = input$trends_group_var,
                 diff_var = input$trends_diff_var,
                 diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -270,7 +274,7 @@ server <- function(input, output, session) {
         content = function(file) {
             data <- trend_data(
                 nurses_subset = nurses_subset_selected(),
-                plot_diff = input$trends_plot_diff,
+                plot_type = input$trend_plot_type,
                 group_var = input$trends_group_var,
                 diff_var = input$trends_diff_var,
                 diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
@@ -283,11 +287,20 @@ server <- function(input, output, session) {
     
     # If difference plots are enabled, disable the grouping controls, and vice versa.
     observe({
-        toggleState("trends_group_var", !input$trends_plot_diff)
-        
-        toggleState("trends_diff_var", input$trends_plot_diff)
-        toggleState("trends_diff_level1", input$trends_plot_diff)
-        toggleState("trends_diff_level2", input$trends_plot_diff)
+        plot_type = input$trend_plot_type
+        if (plot_type == "grouped") {
+            enable("trends_group_var")
+            disable("trends_diff_var")
+            disable("trends_diff_level1")
+            disable("trends_diff_level2")
+        } else if (plot_type == "diff") {
+            enable("trends_diff_var")
+            enable("trends_diff_level1")
+            enable("trends_diff_level2")
+            disable("trends_group_var")
+        } else {
+            stop("Plot type must be either ``grouped'' or ``diff''.")
+        }
     })
     
     # Ensure that the variable level selections in the trend difference controls correspond to the

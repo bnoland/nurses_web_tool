@@ -158,60 +158,73 @@ ui <- fluidPage(
                         tabPanel(title = "Options",
                             fluidRow(
                                 column(width = 12,
+                                    h3("General options"),
+                                    
                                     # If selected, fix the vertical axis on each trend plot to be
                                     # from 0 to 1, inclusive.
                                     checkboxInput(inputId = "trends_fixed_axis",
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     ),
                                     
-                                    checkboxInput(inputId = "trends_plot_diff",
-                                        label = "Plot the difference between two levels of a variable"
-                                    ),
-                                    
-                                    wellPanel(
-                                        # Widget for selecting the variable to group by in the trend
-                                        # data.
-                                        selectInput(inputId = "trends_group_var",
-                                            label = "Group by:",
-                                            # The value of each choice is a variable name in the data
-                                            # set, except for ``none'', which corresponds to no
-                                            # grouping.
-                                            choices = list(
-                                                "None" = "none",
-                                                "Sex" = "sex",
-                                                "Age group" = "age_group",
-                                                "Race" = "race",
-                                                "Hispanic status" = "hisp",
-                                                "Level of education" = "educ",
-                                                "Citizenship status" = "citizen",
-                                                "State" = "state"
-                                            )
+                                    radioButtons(inputId = "trend_plot_type",
+                                        label = "Plot type",
+                                        choices = list(
+                                            "Grouped plot" = "grouped",
+                                            "Difference plot" = "diff"
                                         )
                                     ),
                                     
-                                    wellPanel(
-                                        selectInput(inputId = "trends_diff_var",
-                                            label = "Variable:",
-                                            choices = list(
-                                                "Sex" = "sex",
-                                                "Age group" = "age_group",
-                                                "Race" = "race",
-                                                "Hispanic status" = "hisp",
-                                                "Level of education" = "educ",
-                                                "Citizenship status" = "citizen",
-                                                "State" = "state"
-                                            )
-                                        ),
-                                        
-                                        selectInput(inputId = "trends_diff_level1",
-                                            label = "First:",
-                                            choices = NULL
-                                        ),
-                                        
-                                        selectInput(inputId = "trends_diff_level2",
-                                            label = "Second:",
-                                            choices = NULL
+                                    h3("Grouped plot options"),
+                                    
+                                    helpText("The resulting plot will contain a trend line for
+                                             each level of the variable selected."),
+                                    
+                                    # Widget for selecting the variable to group by in the trend
+                                    # data.
+                                    selectInput(inputId = "trends_group_var",
+                                        label = "Group by:",
+                                        # The value of each choice is a variable name in the data
+                                        # set, except for ``none'', which corresponds to no
+                                        # grouping.
+                                        choices = list(
+                                            "None" = "none",
+                                            "Sex" = "sex",
+                                            "Age group" = "age_group",
+                                            "Race" = "race",
+                                            "Hispanic status" = "hisp",
+                                            "Level of education" = "educ",
+                                            "Citizenship status" = "citizen",
+                                            "State" = "state"
                                         )
+                                    ),
+                                    
+                                    h3("Difference plot options"),
+                                    
+                                    helpText("The resulting plot will consist of a trend line of
+                                             the difference between the first and second levels
+                                             (i.e., first minus second) of the selected variable."),
+                                    
+                                    selectInput(inputId = "trends_diff_var",
+                                        label = "Variable:",
+                                        choices = list(
+                                            "Sex" = "sex",
+                                            "Age group" = "age_group",
+                                            "Race" = "race",
+                                            "Hispanic status" = "hisp",
+                                            "Level of education" = "educ",
+                                            "Citizenship status" = "citizen",
+                                            "State" = "state"
+                                        )
+                                    ),
+                                    
+                                    selectInput(inputId = "trends_diff_level1",
+                                        label = "First:",
+                                        choices = NULL
+                                    ),
+                                    
+                                    selectInput(inputId = "trends_diff_level2",
+                                        label = "Second:",
+                                        choices = NULL
                                     )
                                 )
                             )
@@ -271,6 +284,8 @@ ui <- fluidPage(
                         tabPanel(title = "Options",
                             fluidRow(
                                 column(width = 12,
+                                    h3("General options"),
+                                    
                                     # If selected, show only the states selected by the user in the
                                     # chloropleth maps.
                                     checkboxInput(inputId = "selected_states_only",

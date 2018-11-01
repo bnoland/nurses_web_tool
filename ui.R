@@ -166,6 +166,7 @@ ui <- fluidPage(
                                         label = "Fix vertical axes to be from 0 to 1, inclusive"
                                     ),
                                     
+                                    # Plot type selection.
                                     radioButtons(inputId = "trend_plot_type",
                                         label = "Plot type",
                                         choices = list(
@@ -179,8 +180,7 @@ ui <- fluidPage(
                                     helpText("The resulting plot will contain a trend line for
                                              each level of the variable selected."),
                                     
-                                    # Widget for selecting the variable to group by in the trend
-                                    # data.
+                                    # Selection for the variable to group by in the trend data.
                                     selectInput(inputId = "trends_group_var",
                                         label = "Group by:",
                                         # The value of each choice is a variable name in the data
@@ -204,6 +204,7 @@ ui <- fluidPage(
                                              the difference between the first and second levels
                                              (i.e., first minus second) of the selected variable."),
                                     
+                                    # Selection for the variable to use in the difference plot.
                                     selectInput(inputId = "trends_diff_var",
                                         label = "Variable:",
                                         choices = list(
@@ -217,11 +218,13 @@ ui <- fluidPage(
                                         )
                                     ),
                                     
+                                    # Selection for first level of selected variable.
                                     selectInput(inputId = "trends_diff_level1",
                                         label = "First:",
                                         choices = NULL
                                     ),
                                     
+                                    # Selection for second level of selected variable.
                                     selectInput(inputId = "trends_diff_level2",
                                         label = "Second:",
                                         choices = NULL

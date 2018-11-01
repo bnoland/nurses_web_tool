@@ -81,29 +81,29 @@ trend_data <- function(nurses_subset, plot_type, group_var = "none", diff_var = 
 trend_grouped_plot <- function(nurses_subset, group_var = "none", use_viridis = FALSE, type) {
     grouped_data <- trend_grouped_data(nurses_subset, group_var, type)
     
-    if (group_var != "none") {
-        legend_name <- switch(group_var,
-            "sex" = "Sex",
-            "age_group" = "Age group",
-            "race" = "Race",
-            "hisp" = "Hispanic status",
-            "educ" = "Level of education",
-            "citizen" = "Citizenship status",
-            "state" = "State"
-        )
-        
-        group_var <- as.symbol(group_var)
-        
-        p <- ggplot(grouped_data, aes(year, prop, color = !!group_var)) +
-            geom_line(size = 1)
-        if (use_viridis) {
-            p + viridis::scale_color_viridis(name = legend_name, discrete = TRUE)
-        } else {
-            p + scale_color_discrete(name = legend_name)
-        }
+    if (group_var == "none") {
+        p <- ggplot(grouped_data, aes(year, prop)) + geom_line(size = 1)
+        return(p)
+    }
+    
+    legend_name <- switch(group_var,
+        "sex" = "Sex",
+        "age_group" = "Age group",
+        "race" = "Race",
+        "hisp" = "Hispanic status",
+        "educ" = "Level of education",
+        "citizen" = "Citizenship status",
+        "state" = "State"
+    )
+    
+    group_var <- as.symbol(group_var)
+    
+    p <- ggplot(grouped_data, aes(year, prop, color = !!group_var)) +
+        geom_line(size = 1)
+    if (use_viridis) {
+        p + viridis::scale_color_viridis(name = legend_name, discrete = TRUE)
     } else {
-        ggplot(grouped_data, aes(year, prop)) +
-            geom_line(size = 1)
+        p + scale_color_discrete(name = legend_name)
     }
 }
 

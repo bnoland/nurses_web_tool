@@ -22,7 +22,7 @@ ui <- fluidPage(
             # Hack to force the slider input widget to only put tick marks at integer values.
             tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
             
-            bsCollapse(
+            bsCollapse(id = "selection_panels",
                 multiple = TRUE,
                 
                 # Year range selection.

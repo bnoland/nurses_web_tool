@@ -20,7 +20,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(
             # Hack to force the slider input widget to only put tick marks at integer values.
-            tags$style(type = "text/css", ".irs-grid-pol.small {height: 0px;}"),
+            tags$style(type = "text/css", ".irs-grid-pol.small { height: 0px; }"),
             
             bsCollapse(id = "selection_panels",
                 multiple = TRUE,

@@ -33,10 +33,7 @@
     ],
     "selected_states_only": false,
     "selection_panels": null,
-    "sex_selection": [
-      "Male",
-      "Female"
-    ],
+    "sex_selection": "Female",
     "state_selection": [
       "AL",
       "AK",
@@ -91,9 +88,9 @@
       "WY"
     ],
     "trend_plot_type": "grouped",
-    "trends_diff_level1": "",
+    "trends_diff_level1": "Male",
     "trends_diff_level1-selectized": "",
-    "trends_diff_level2": "",
+    "trends_diff_level2": "Male",
     "trends_diff_level2-selectized": "",
     "trends_diff_var": "sex",
     "trends_diff_var-selectized": "",
@@ -108,7 +105,7 @@
   },
   "output": {
     "coverage_trend_plot": {
-      "src": "[image data sha1: bf6c738b789b4307cf8d7b173751a46e3c246e4b]",
+      "src": "[image data sha1: dfe372a612c230e32662278a51ff0dbfbdaa2b94]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -127,8 +124,8 @@
             "domain": {
               "left": 2008.6,
               "right": 2017.4,
-              "bottom": -0.0103221206454388,
-              "top": 0.216764533554214
+              "bottom": -0.0103906569253604,
+              "top": 0.218203795432569
             },
             "mapping": {
               "x": "year",
@@ -149,7 +146,7 @@
       }
     },
     "members_trend_plot": {
-      "src": "[image data sha1: 1b254baeced00decafcaaace6d12e9df8f8b4291]",
+      "src": "[image data sha1: 60530064e120768c4f86e216c81bbd763c7b8546]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -168,8 +165,8 @@
             "domain": {
               "left": 2008.6,
               "right": 2017.4,
-              "bottom": -0.00935114969306382,
-              "top": 0.19637414355434
+              "bottom": -0.00931086549763797,
+              "top": 0.195528175450397
             },
             "mapping": {
               "x": "year",

@@ -91,13 +91,13 @@ trend_grouped_plot <- function(nurses_subset, group_var = "none",
   }
   
   legend_name <- switch(group_var,
-                        "sex" = "Sex",
-                        "age_group" = "Age group",
-                        "race" = "Race",
-                        "hisp" = "Hispanic status",
-                        "educ" = "Level of education",
-                        "citizen" = "Citizenship status",
-                        "state" = "State"
+    "sex" = "Sex",
+    "age_group" = "Age group",
+    "race" = "Race",
+    "hisp" = "Hispanic status",
+    "educ" = "Level of education",
+    "citizen" = "Citizenship status",
+    "state" = "State"
   )
   
   group_var <- as.symbol(group_var)

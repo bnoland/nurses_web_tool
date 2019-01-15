@@ -5,6 +5,7 @@ library(shinyjs)
 library(usmap)
 library(ggplot2)
 library(dplyr)
+library(digest)
 
 # Computes and returns union membership or union contract coverage proportions
 # from the given (pre-grouped) data.
@@ -386,9 +387,10 @@ server <- function(input, output, session) {
     }
   )
   
-  # Export data table hashes for testing.
-  exportTestValues(nurses_subset = {
-    nurses_subset <- nurses_subset_selected()
-    digest::digest(nurses_subset, algo = "md5")
-  })
+  # Export data table hashes for testing purposes.
+  exportTestValues(
+    nurses_subset = digest(nurses_subset_selected(), algo = "md5"),
+    membership_trend_data = digest(membership_trend_data(), algo = "md5"),
+    coverage_trend_data = digest(coverage_trend_data(), algo = "md5")
+  )
 }

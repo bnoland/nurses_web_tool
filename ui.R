@@ -121,7 +121,7 @@ ui <- fluidPage(
     ),
 
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(id = "tabs",
         type = "tabs",
 
         # Trends panel.

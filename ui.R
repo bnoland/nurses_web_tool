@@ -140,7 +140,7 @@ ui <- fluidPage(
                   width = 12,
                   # Trend plot for union membership coverage.
                   h3("Union membership proportion"),
-                  plotOutput("members_trend_plot")
+                  plotOutput("membership_trend_plot")
                 )
               ),
               fluidRow(

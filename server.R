@@ -193,7 +193,7 @@ state_map <- function(nurses_subset, selected_states_only = FALSE,
 
 server <- function(input, output, session) {
   # Returns the subset of the nurses data selected by the user.
-  nurses_subset_selected <- reactive({
+  nurses_subset_selected <- reactive(
     nurses %>% filter(
       year >= input$year_range[1], year <= input$year_range[2],
       sex %in% input$sex_selection,
@@ -204,14 +204,10 @@ server <- function(input, output, session) {
       citizen %in% input$citizen_selection,
       state %in% input$state_selection
     )
-  })
-  
-  # The trend data is needed for downloading as well as rendering to a data
-  # table, among other things. Hence the need for the next two reactive
-  # functions to avoid gross code duplication.
+  )
   
   # Returns the data table showing the union membership trend data.
-  membership_trend_data <- reactive({
+  membership_trend_data <- reactive(
     trend_data(
       nurses_subset = nurses_subset_selected(),
       plot_type = input$trend_plot_type,
@@ -220,10 +216,10 @@ server <- function(input, output, session) {
       diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
       type = "membership"
     )
-  })
+  )
   
   # Returns the data table showing the union contract coverage trend data.
-  coverage_trend_data <- reactive({
+  coverage_trend_data <- reactive(
     trend_data(
       nurses_subset = nurses_subset_selected(),
       plot_type = input$trend_plot_type,
@@ -232,14 +228,14 @@ server <- function(input, output, session) {
       diff_levels = c(input$trends_diff_level1, input$trends_diff_level2),
       type = "coverage"
     )
-  })
+  )
   
   # Render the trend data tables.
   output$membership_trend_data <- renderDataTable(membership_trend_data())
   output$coverage_trend_data <- renderDataTable(coverage_trend_data())
   
   # Render the trend plot for union membership.
-  output$membership_trend_plot <- renderPlot({
+  output$membership_trend_plot <- renderPlot(
     trend_plot(
       nurses_subset = nurses_subset_selected(),
       plot_type = input$trend_plot_type,
@@ -250,10 +246,10 @@ server <- function(input, output, session) {
       use_viridis = input$trends_use_viridis,
       type = "membership"
     )
-  })
+  )
   
   # Render the trend plot for union contract coverage.
-  output$coverage_trend_plot <- renderPlot({
+  output$coverage_trend_plot <- renderPlot(
     trend_plot(
       nurses_subset = nurses_subset_selected(),
       plot_type = input$trend_plot_type,
@@ -264,7 +260,7 @@ server <- function(input, output, session) {
       use_viridis = input$trends_use_viridis,
       type = "coverage"
     )
-  })
+  )
   
   # Download the union membership trend data.
   output$membership_trend_download <- downloadHandler(
@@ -312,51 +308,51 @@ server <- function(input, output, session) {
     updateSelectInput(session, "trends_diff_level2", choices = levels(diff_var))
   })
   
+  # Returns the data table showing the state-level union membership data.
+  membership_state_data <- reactive(
+    state_data(
+      nurses_subset = nurses_subset_selected(),
+      type = "membership"
+    )
+  )
+  
+  # Returns the data table showing the state-level union contract coverage data.
+  coverage_state_data <- reactive(
+    state_data(
+      nurses_subset = nurses_subset_selected(),
+      type = "coverage"
+    )
+  )
+  
+  # Render the state-level data tables.
+  output$membership_state_data <- renderDataTable(membership_state_data())
+  output$coverage_state_data <- renderDataTable(coverage_state_data())
+  
   # Render the map showing union membership at the state-level.
-  output$membership_state_map <- renderPlot({
+  output$membership_state_map <- renderPlot(
     state_map(
       nurses_subset = nurses_subset_selected(),
       selected_states_only = input$selected_states_only,
       fixed_scale = input$maps_fixed_scale,
       type = "membership"
     )
-  })
+  )
   
   # Render the map showing union contract coverage at the state-level.
-  output$coverage_state_map <- renderPlot({
+  output$coverage_state_map <- renderPlot(
     state_map(
       nurses_subset = nurses_subset_selected(),
       selected_states_only = input$selected_states_only,
       fixed_scale = input$maps_fixed_scale,
       type = "coverage"
     )
-  })
-  
-  # Render the data table showing the state-level union membership data.
-  output$membership_state_data <- renderDataTable({
-    state_data(
-      nurses_subset = nurses_subset_selected(),
-      type = "membership"
-    )
-  })
-  
-  # Render the data table showing the state-level union contract coverage data.
-  output$coverage_state_data <- renderDataTable({
-    state_data(
-      nurses_subset = nurses_subset_selected(),
-      type = "coverage"
-    )
-  })
+  )
   
   # Download the state-level union membership data.
   output$membership_state_download <- downloadHandler(
     filename = "membership_state.csv",
     content = function(file) {
-      data <- state_data(
-        nurses_subset = nurses_subset_selected(),
-        type = "membership"
-      )
-      
+      data <- membership_state_data()
       write_csv(data, file)
     }
   )
@@ -365,11 +361,7 @@ server <- function(input, output, session) {
   output$coverage_state_download <- downloadHandler(
     filename = "coverage_state.csv",
     content = function(file) {
-      data <- state_data(
-        nurses_subset = nurses_subset_selected(),
-        type = "coverage"
-      )
-      
+      data <- coverage_state_data()
       write_csv(data, file)
     }
   )
@@ -389,8 +381,10 @@ server <- function(input, output, session) {
   
   # Export data table hashes for testing purposes.
   exportTestValues(
-    nurses_subset = digest(nurses_subset_selected(), algo = "md5"),
-    membership_trend_data = digest(membership_trend_data(), algo = "md5"),
-    coverage_trend_data = digest(coverage_trend_data(), algo = "md5")
+    nurses_subset = digest(nurses_subset_selected()),
+    membership_trend_data = digest(membership_trend_data()),
+    coverage_trend_data = digest(coverage_trend_data()),
+    membership_state_data = digest(membership_state_data),
+    coverage_state_data = digest(coverage_state_data)
   )
 }

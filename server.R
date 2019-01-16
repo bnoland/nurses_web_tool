@@ -384,7 +384,7 @@ server <- function(input, output, session) {
     nurses_subset = digest(nurses_subset_selected()),
     membership_trend_data = digest(membership_trend_data()),
     coverage_trend_data = digest(coverage_trend_data()),
-    membership_state_data = digest(membership_state_data),
-    coverage_state_data = digest(coverage_state_data)
+    membership_state_data = digest(membership_state_data()),
+    coverage_state_data = digest(coverage_state_data())
   )
 }

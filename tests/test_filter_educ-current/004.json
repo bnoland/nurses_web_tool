@@ -1,0 +1,280 @@
+{
+  "input": {
+    "age_selection": [
+      "16-24",
+      "25-54",
+      "55 and over"
+    ],
+    "citizen_selection": [
+      "US native",
+      "Foreign-born, citizen",
+      "Foreign-born, non-citizen"
+    ],
+    "educ_selection": "Associate degree",
+    "hisp_status_selection": [
+      "Hispanic",
+      "Non-Hispanic"
+    ],
+    "maps_fixed_scale": false,
+    "race_selection": [
+      "White",
+      "Black",
+      "American Indian (Alaskan Native)",
+      "Asian",
+      "Hawaiian/Pacific Islander",
+      "Other"
+    ],
+    "selected_states_only": false,
+    "selection_panels": null,
+    "sex_selection": [
+      "Male",
+      "Female"
+    ],
+    "state_selection": [
+      "AL",
+      "AK",
+      "AZ",
+      "AR",
+      "CA",
+      "CO",
+      "CT",
+      "DE",
+      "DC",
+      "FL",
+      "GA",
+      "HI",
+      "ID",
+      "IL",
+      "IN",
+      "IA",
+      "KS",
+      "KY",
+      "LA",
+      "ME",
+      "MD",
+      "MA",
+      "MI",
+      "MN",
+      "MS",
+      "MO",
+      "MT",
+      "NE",
+      "NV",
+      "NH",
+      "NJ",
+      "NM",
+      "NY",
+      "NC",
+      "ND",
+      "OH",
+      "OK",
+      "OR",
+      "PA",
+      "RI",
+      "SC",
+      "SD",
+      "TN",
+      "TX",
+      "UT",
+      "VT",
+      "VA",
+      "WA",
+      "WV",
+      "WI",
+      "WY"
+    ],
+    "tabs": "Geography",
+    "trend_plot_type": "grouped",
+    "trends_diff_level1": "Male",
+    "trends_diff_level1-selectized": "",
+    "trends_diff_level2": "Male",
+    "trends_diff_level2-selectized": "",
+    "trends_diff_var": "sex",
+    "trends_diff_var-selectized": "",
+    "trends_fixed_axis": false,
+    "trends_group_var": "none",
+    "trends_group_var-selectized": "",
+    "trends_use_viridis": false,
+    "year_range": [
+      2009,
+      2017
+    ]
+  },
+  "output": {
+    "coverage_state_map": {
+      "src": "[image data sha1: 9e01aad8bda1819d2c680975ccc5cbb3bc7ecc48]",
+      "width": 631,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -2259314.9481618,
+              "right": 2743702.90235804,
+              "bottom": -2621994.34738072,
+              "top": 891346.949672937
+            },
+            "mapping": {
+              "x": "map_df$long",
+              "y": "map_df$lat",
+              "group": "map_df$group",
+              "fill": "map_df[, values]"
+            },
+            "range": {
+              "left": 9.83339768359031,
+              "right": 563.475444159498,
+              "bottom": 393.275217932752,
+              "top": 4.48318804483188
+            }
+          }
+        ],
+        "dims": {
+          "width": 631,
+          "height": 400
+        }
+      }
+    },
+    "coverage_trend_plot": {
+      "src": "[image data sha1: 93bf8a1e53d26e798acd1165d336e10e37cbdd05]",
+      "width": 631,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2008.6,
+              "right": 2017.4,
+              "bottom": -0.00926506167096248,
+              "top": 0.194566295090212
+            },
+            "mapping": {
+              "x": "year",
+              "y": "prop"
+            },
+            "range": {
+              "left": 41.1506849315069,
+              "right": 625.520547945205,
+              "bottom": 365.849315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 631,
+          "height": 400
+        }
+      }
+    },
+    "membership_state_map": {
+      "src": "[image data sha1: 66e02a3ee7087e1cfaa2f4eefaa9e7ef8b99df2c]",
+      "width": 631,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": -2259314.9481618,
+              "right": 2743702.90235804,
+              "bottom": -2621994.34738072,
+              "top": 891346.949672937
+            },
+            "mapping": {
+              "x": "map_df$long",
+              "y": "map_df$lat",
+              "group": "map_df$group",
+              "fill": "map_df[, values]"
+            },
+            "range": {
+              "left": 9.83339768359031,
+              "right": 563.475444159498,
+              "bottom": 393.275217932752,
+              "top": 4.48318804483188
+            }
+          }
+        ],
+        "dims": {
+          "width": 631,
+          "height": 400
+        }
+      }
+    },
+    "membership_trend_plot": {
+      "src": "[image data sha1: 8b356a0db5dfe519d1eef3f2c8842aab27f9cf54]",
+      "width": 631,
+      "height": 400,
+      "coordmap": {
+        "panels": [
+          {
+            "panel": 1,
+            "row": 1,
+            "col": 1,
+            "panel_vars": {
+
+            },
+            "log": {
+              "x": null,
+              "y": null
+            },
+            "domain": {
+              "left": 2008.6,
+              "right": 2017.4,
+              "bottom": -0.00841952253209262,
+              "top": 0.176809973173945
+            },
+            "mapping": {
+              "x": "year",
+              "y": "prop"
+            },
+            "range": {
+              "left": 41.1506849315069,
+              "right": 625.520547945205,
+              "bottom": 365.849315068493,
+              "top": 5.47945205479452
+            }
+          }
+        ],
+        "dims": {
+          "width": 631,
+          "height": 400
+        }
+      }
+    }
+  },
+  "export": {
+    "coverage_state_data": "4bfb10d81166b73590f0ae42ef14fdeb",
+    "coverage_trend_data": "a7e9383d9481af8ab2371a123143471d",
+    "membership_state_data": "82badec16b68d8d77c63a8fb7e912436",
+    "membership_trend_data": "9606bcaac7b9efe9eb01c5f7f08c878e",
+    "nurses_subset": "305df9373679474a7be0a3ab044acdb3"
+  }
+}

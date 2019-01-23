@@ -5,7 +5,25 @@ library(dplyr)
 library(purrr)
 library(forcats)
 
-nurses_raw <- read_csv("nurses_raw.csv")
+data_dir <- "data"
+
+path <- file.path(data_dir, "nurses_raw.csv")
+nurses_raw <- read_csv(path,
+  col_types = cols(
+    hryear4 = col_integer(),
+    pesex = col_integer(),
+    peernlab = col_integer(),
+    peerncov = col_integer(),
+    peage = col_integer(),
+    ptdtrace = col_integer(),
+    pehspnon = col_integer(),
+    peeduca = col_integer(),
+    prcitshp = col_integer(),
+    gestfips = col_integer(),
+    pworwgt = col_double(),
+    peio1ocd = col_integer()
+  )
+)
 
 # Code sex from the CPS variable PESEX.
 sex_code <- function(pesex) {
@@ -131,12 +149,13 @@ state_code <- function(gestfips) {
 nurses_preprocessed <- nurses_raw %>%
   transmute(
     # TODO: Doug Kruse's script already renamed ``hryear4'' to ``year''.
-    # year = hryear4,
-    year = year,
+    year = hryear4,
+    #year = year,
     sex = sex_code(pesex),
     member = (peernlab == 1),
     covered = (member | peerncov == 1),
-    age = ifelse(is.na(peage), prtage, peage),
+    #age = ifelse(is.na(peage), prtage, peage),
+    age = peage,
     age_group = age_group_code(age),
     race = race_code(ptdtrace),
     hisp = hispanic_code(pehspnon),
@@ -144,9 +163,11 @@ nurses_preprocessed <- nurses_raw %>%
     citizen = citizenship_code(prcitshp),
     state = state_code(gestfips),
     # TODO: Proper weight computation?
-    weight = pworwgt / 10
+    #weight = pworwgt / 10
+    weight = pworwgt / 10000
   ) %>%
-  filter(age >= 16)
+  filter(age >= 16) %>%
+  arrange(year)
 
 # Sanity check for missing values.
 for (name in names(nurses_preprocessed)) {
@@ -156,4 +177,5 @@ for (name in names(nurses_preprocessed)) {
   }
 }
 
-write_csv(nurses_preprocessed, "nurses_preprocessed.csv")
+path <- file.path(data_dir, "nurses_preprocessed.csv")
+write_csv(nurses_preprocessed, path)

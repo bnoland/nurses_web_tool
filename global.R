@@ -4,7 +4,10 @@ library(readr)
 
 source("factor_levels.R")
 
-nurses <- read_csv("nurses_preprocessed.csv",
+data_dir <- "data"
+path <- file.path(data_dir, "nurses_preprocessed.csv")
+
+nurses <- read_csv(path,
   col_types = cols(
     year = col_integer(),
     sex = col_factor(levels = sex_factor_levels()),

@@ -57,9 +57,10 @@ trend_diff_data <- function(nurses_subset, diff_var, diff_levels, type) {
   diff_data_level2 <- diff_data %>%
     filter(eval(diff_var) == diff_levels[[2]])
   
-  diff_data <- inner_join(diff_data_level1, diff_data_level2,
-                          by = "year",
-                          suffix = c(".level1", ".level2")
+  diff_data <- inner_join(
+    diff_data_level1, diff_data_level2,
+    by = "year",
+    suffix = c(".level1", ".level2")
   )
   
   diff_data <- diff_data %>%
@@ -133,7 +134,7 @@ trend_plot <- function(nurses_subset, plot_type, group_var = "none",
     stop("Plot type must be either ``grouped'' or ``diff''.")
   }
   
-  p <- p + labs(x = "Year", y = "Proportion")
+  p <- p + labs(x = "Year", y = "Density")
   
   # Ensure that every year in the selected data is marked on the horizontal
   # axis. Only do this if the data selection is non-empty -- otherwise min() and
@@ -184,7 +185,7 @@ state_map <- function(nurses_subset, selected_states_only = FALSE,
     scale_fill_gradient(
       low = "#56B1F7", high = "#132B43",
       na.value = "gray",
-      name = "Proportion",
+      name = "Density",
       limits = c(0, scale_max),
       label = scales::percent
     ) +

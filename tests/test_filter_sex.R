@@ -3,19 +3,19 @@ app$snapshotInit("test_filter_sex")
 
 # Both sexes.
 app$setInputs(tabs = "Trends")
-app$setInputs(tabs = "Geography")
+app$setInputs(tabs = "States")
 app$snapshot()
 
 # Females only.
 app$setInputs(sex_selection = "Female")
 app$setInputs(tabs = "Trends")
-app$setInputs(tabs = "Geography")
+app$setInputs(tabs = "States")
 app$snapshot()
 
 # Males only.
 app$setInputs(sex_selection = "Male")
 app$setInputs(tabs = "Trends")
-app$setInputs(tabs = "Geography")
+app$setInputs(tabs = "States")
 app$snapshot()
 
 # None selected.

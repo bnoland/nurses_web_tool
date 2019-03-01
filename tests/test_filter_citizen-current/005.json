@@ -86,7 +86,7 @@
       "WI",
       "WY"
     ],
-    "tabs": "Geography",
+    "tabs": "States",
     "trend_plot_type": "grouped",
     "trends_diff_level1": "Male",
     "trends_diff_level1-selectized": "",
@@ -100,12 +100,12 @@
     "trends_use_viridis": false,
     "year_range": [
       2009,
-      2017
+      2018
     ]
   },
   "output": {
     "coverage_state_map": {
-      "src": "[image data sha1: fef68dca13a14bcb940e5d32603aa1ccb3afbda3]",
+      "src": "[image data sha1: 643880b6ec2715fc8ba788e68ee914596c26bec7]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -134,8 +134,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -148,7 +148,7 @@
       }
     },
     "coverage_trend_plot": {
-      "src": "[image data sha1: 5f45b5f7c390122deccd1641fff47fd60bd66464]",
+      "src": "[image data sha1: d34f1df6b760d039610adba1dd96d8cd6d8b08d1]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -165,8 +165,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0151029137024088,
               "top": 0.317161187750585
             },
@@ -175,7 +175,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 36.1506849315069,
+              "left": 36.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -189,7 +189,7 @@
       }
     },
     "membership_state_map": {
-      "src": "[image data sha1: 9920cd7a92133a5d819fd6a3ec39e9601076f9cc]",
+      "src": "[image data sha1: ef0a7e0a82899b09158fe229ff9433b9ea30d3d1]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -218,8 +218,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -232,7 +232,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: 01ace207623f779748dc84304bd8778f4e939ea5]",
+      "src": "[image data sha1: d290c97bced6664c5ddaf691accdd18cbdd4dbf1]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -249,8 +249,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0131724944884677,
               "top": 0.276622384257822
             },
@@ -259,7 +259,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 36.1506849315069,
+              "left": 36.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -274,10 +274,10 @@
     }
   },
   "export": {
-    "coverage_state_data": "0ec817f6c7e4d76400c6b771cafb4bfa",
-    "coverage_trend_data": "4262521f828061a6289fbdcf92e807fb",
-    "membership_state_data": "2ef625ffed328db46c7ba8cac54141c1",
-    "membership_trend_data": "530bad34ffaf456731493468042143e1",
-    "nurses_subset": "d1fa8edbc0ce65ba68e10e15084d8c71"
+    "coverage_state_data": "cbb55ecfdbc865e27cef9d1987ced93b",
+    "coverage_trend_data": "65944539dd63cee7fa13812714d75c02",
+    "membership_state_data": "494d1888ed5c5d78c9aaf6896164c7a3",
+    "membership_trend_data": "1df5223709a5683f976e99e6af728073",
+    "nurses_subset": "c5019e69937328180a9c7e61901665a1"
   }
 }

@@ -1,7 +1,7 @@
 app <- ShinyDriver$new("../")
 app$snapshotInit("test_map_scale")
 
-app$setInputs(tabs = "Geography")
+app$setInputs(tabs = "States")
 
 # Default scale.
 app$snapshot()

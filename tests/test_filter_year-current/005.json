@@ -90,7 +90,7 @@
       "WI",
       "WY"
     ],
-    "tabs": "Geography",
+    "tabs": "States",
     "trend_plot_type": "grouped",
     "trends_diff_level1": "Male",
     "trends_diff_level1-selectized": "",
@@ -109,7 +109,7 @@
   },
   "output": {
     "coverage_state_map": {
-      "src": "[image data sha1: 1ab32224e512f82419e1f3e640349191b271616a]",
+      "src": "[image data sha1: 5ad90675e0bf86ce6bc7b0dc822cb7d86a52ee54]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -138,8 +138,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -152,7 +152,7 @@
       }
     },
     "coverage_trend_plot": {
-      "src": "[image data sha1: 98d6f9f3d59e46315ad6b79a2dc064dfcb8c390b]",
+      "src": "[image data sha1: fad157e78b92853d7ec9a7f51dbdf2e01b2440e5]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -179,7 +179,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 41.1506849315069,
+              "left": 41.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -193,7 +193,7 @@
       }
     },
     "membership_state_map": {
-      "src": "[image data sha1: 3bf9777d9911ea310bc6ed82b18aa89050304c6e]",
+      "src": "[image data sha1: abe73271df2592dfa98f6dbdbff2b1dd3fecc676]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -222,8 +222,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -236,7 +236,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: 6b4c52a1d8b2519027075cf31eb0f9c8b89043bc]",
+      "src": "[image data sha1: 645f2ef96abe135a9ff7a84a8c5621198aa4a598]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -263,7 +263,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 41.1506849315069,
+              "left": 41.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -278,10 +278,10 @@
     }
   },
   "export": {
-    "coverage_state_data": "e92f7e37d847be21f717cc0f1c20e352",
-    "coverage_trend_data": "3f1ec16ef79b248be7e9fa272bbe3676",
-    "membership_state_data": "cb729c95479c9382d029b7a191001e87",
-    "membership_trend_data": "9508c3fd7846660ecb496af2749c2a94",
-    "nurses_subset": "0e23f41a9f32d25b7e96189bf045a40f"
+    "coverage_state_data": "443c86dbeb6d51267126f11a864c91d4",
+    "coverage_trend_data": "52fd072fbcbe80791389589c91e3a424",
+    "membership_state_data": "83fd2309e87382f47976378773997a08",
+    "membership_trend_data": "d9c38bada747142c928dfaf24bb88ea6",
+    "nurses_subset": "c87e5b970292d4b96d4f878eede9673a"
   }
 }

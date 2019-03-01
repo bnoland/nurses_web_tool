@@ -1,7 +1,7 @@
 app <- ShinyDriver$new("../")
 app$snapshotInit("test_map_show_selected_only")
 
-app$setInputs(tabs = "Geography")
+app$setInputs(tabs = "States")
 
 # All states.
 app$setInputs(selected_states_only = TRUE)

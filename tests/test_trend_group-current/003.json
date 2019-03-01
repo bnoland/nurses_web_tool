@@ -100,12 +100,12 @@
     "trends_use_viridis": false,
     "year_range": [
       2009,
-      2017
+      2018
     ]
   },
   "output": {
     "coverage_trend_plot": {
-      "src": "[image data sha1: f46d270c5067f48b9d892751972f49ecbfaa4ad5]",
+      "src": "[image data sha1: 3225645c282c66bebde02fc69f8705ae59d6fcdd]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -122,8 +122,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0116347987263914,
               "top": 0.24433077325422
             },
@@ -133,7 +133,7 @@
               "colour": "race"
             },
             "range": {
-              "left": 41.1506849315069,
+              "left": 41.1506849315068,
               "right": 558.843287671233,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -147,7 +147,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: 16c90c5d229cb04497c35db7ab5938805e1382e7]",
+      "src": "[image data sha1: 57d927e9f6f8f7b125011c8754e3ceb41368533d]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -164,8 +164,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0109390758033145,
               "top": 0.229720591869605
             },
@@ -175,7 +175,7 @@
               "colour": "race"
             },
             "range": {
-              "left": 41.1506849315069,
+              "left": 41.1506849315068,
               "right": 558.843287671233,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -190,10 +190,10 @@
     }
   },
   "export": {
-    "coverage_state_data": "c6769c0b1fade2f5608aa228167b1aab",
-    "coverage_trend_data": "a0ee10437b42a2806b3ad24e0759cb98",
-    "membership_state_data": "f0192e64dc95a0966e77c57cccd638c8",
-    "membership_trend_data": "25e17bbabca875deaf4edda7991d6501",
-    "nurses_subset": "f98616d0823a68782bb3fbd791e81291"
+    "coverage_state_data": "69f5874eb4b50e44a72024a307777e7a",
+    "coverage_trend_data": "d2b3c912c44410e36fe6f5ed704c00c2",
+    "membership_state_data": "3c40e5b36fc596f62989912db2475a37",
+    "membership_trend_data": "693085130cdd9d760992eea64428607f",
+    "nurses_subset": "2c2514f504d282a6ef3ed42f9a37d5b6"
   }
 }

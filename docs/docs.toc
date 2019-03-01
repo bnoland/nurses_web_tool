@@ -1,5 +1,7 @@
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}
 \contentsline {section}{\numberline {2}Details of the data}{1}{section.2}
 \contentsline {section}{\numberline {3}Working with the tool}{3}{section.3}
-\contentsline {subsection}{\numberline {3.1}Working with trends}{3}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Working with maps}{3}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.1}Overview of the interface}{3}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Working with trends}{3}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Working with maps}{4}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Downloading the data}{4}{subsection.3.4}

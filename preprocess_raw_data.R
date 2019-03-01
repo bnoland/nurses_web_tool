@@ -148,9 +148,7 @@ state_code <- function(gestfips) {
 
 nurses_preprocessed <- nurses_raw %>%
   transmute(
-    # TODO: Doug Kruse's script already renamed ``hryear4'' to ``year''.
     year = hryear4,
-    #year = year,
     sex = sex_code(pesex),
     member = (peernlab == 1),
     covered = (member | peerncov == 1),
@@ -162,8 +160,6 @@ nurses_preprocessed <- nurses_raw %>%
     educ = education_code(peeduca),
     citizen = citizenship_code(prcitshp),
     state = state_code(gestfips),
-    # TODO: Proper weight computation?
-    #weight = pworwgt / 10
     weight = pworwgt / 10000
   ) %>%
   filter(age >= 16) %>%

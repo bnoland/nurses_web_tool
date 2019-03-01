@@ -276,9 +276,9 @@ ui <- fluidPage(
           )
         ),
 
-        # Geography panel.
+        # States panel.
         tabPanel(
-          title = "Geography",
+          title = "States",
 
           tabsetPanel(
             type = "tabs",

@@ -1,6 +1,12 @@
 \documentclass[letterpaper,12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{enumitem}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue
+}
 
 \title{Documentation for the nurses web tool}
 \author{Benjamin Noland}
@@ -9,93 +15,106 @@
 \begin{document}
 
 \maketitle
+\tableofcontents
 
-\section*{Introduction}
+\section{Introduction}
 
-This web tool allows you to explore trends in union membership and union
-contract coverage for registered nurses in the United States. You can use the
-tool to generate trend plots and chloropleth maps showing how these quantities
-change over time, filtered and/or grouped according to a variety of demographics
-(detailed below). The tool uses data derived from the Current Population Survey
-(CPS) public use microdata. For background information on the CPS, see [ADD
+This web tool allows you to explore trends in union membership and
+union contract coverage for registered nurses in the United
+States. You can use the tool to generate trend plots and chloropleth
+maps showing how these quantities change over time, filtered and/or
+grouped according to a variety of demographics (detailed below). The
+tool uses data derived from the Current Population Survey (CPS) public
+use microdata. For background information on the CPS, see [ADD
 REFERENCE].
 
-\section*{Details of the data}
+\section{Details of the data}
 
-The tool operates on data derived from the Current Population Survey (CPS)
-public use microdata (see [ADD REFERENCE] for information on the raw CPS data).
-Each entry in the data used by the tool corresponds to an individual interviewed
-as part of the CPS, and includes various demographic data on that individual, as
-well as flags indicating whether the individual is a union member or covered by
-a union contract. Each entry also includes the year in which the individual was
-interviewed, and a statistical weight used to calculate union membership and
-union contract coverage proportions.
+The tool operates on data derived from the Current Population Survey
+(CPS) public use microdata (see [ADD REFERENCE] for information on the
+raw CPS data).  Each entry in the data used by the tool corresponds to
+an individual interviewed as part of the CPS, and includes various
+demographic data on that individual, as well as flags indicating
+whether the individual is a union member or covered by a union
+contract. Each entry also includes the year in which the individual
+was interviewed, and a statistical weight used to calculate union
+membership and union contract coverage proportions.
 
-The following are descriptions of the variables in the data used by the tool,
-including the possible values or levels that a particular variable can assume:
+The following are descriptions of the variables in the data used by
+the tool, including the possible values or levels that a particular
+variable can assume:
 \begin{description}[style=multiline,leftmargin=3cm,font=\normalfont]
 \item[\texttt{year}] The year the individual was interviewed.
 
-\item[\texttt{sex}] The individual's sex. This is derived from the CPS variable
-\texttt{PESEX}.
+\item[\texttt{sex}] The individual's sex. This is derived from the CPS
+  variable \texttt{PESEX}.
 
-\textbf{Levels:} \texttt{Male}, \texttt{Female}
+  \textbf{Levels:} \texttt{Male}, \texttt{Female}
 
-\item[\texttt{member}] Union membership flag. \texttt{TRUE} if the individual is
-a union member, and \texttt{FALSE} otherwise.
+\item[\texttt{member}] Union membership flag. \texttt{TRUE} if the
+  individual is a union member, and \texttt{FALSE} otherwise.
 
-\item[\texttt{covered}] Union contract coverage flag. \texttt{TRUE} if the
-individual is covered by a union contract, and \texttt{FALSE} otherwise.
+\item[\texttt{covered}] Union contract coverage flag. \texttt{TRUE} if
+  the individual is covered by a union contract, and \texttt{FALSE}
+  otherwise.
 
-\item[\texttt{age}] The individual's age. This is derived from the CPS variable
-\texttt{PEAGE} or, if that is unavailable, the CPS variable \texttt{PRTAGE}.
+\item[\texttt{age}] The individual's age. This is derived from the CPS
+  variable \texttt{PEAGE} or, if that is unavailable, the CPS variable
+  \texttt{PRTAGE}.
 
-\item[\texttt{age\_group}] The individual's age group (16-24, 25-54, or 55 and
-over). This is derived from \texttt{age}.
+\item[\texttt{age\_group}] The individual's age group (16-24, 25-54,
+  or 55 and over). This is derived from \texttt{age}.
 
-\textbf{Levels:} \texttt{16-24}, \texttt{25-54}, \texttt{55 and over}
+  \textbf{Levels:} \texttt{16-24}, \texttt{25-54}, \texttt{55 and
+    over}
 
-\item[\texttt{race}] The individual's race. This is derived from the CPS
-variable \texttt{PTDTRACE}. It has levels for some of the more common races, and
-a level \texttt{Other} for other races. The levels of this variable are less
-fine-grained than those of \texttt{PTDTRACE} (see the CPS documentation for
-details).
+\item[\texttt{race}] The individual's race. This is derived from the
+  CPS variable \texttt{PTDTRACE}. It has levels for some of the more
+  common races, and a level \texttt{Other} for other races. The levels
+  of this variable are less fine-grained than those of
+  \texttt{PTDTRACE} (see the CPS documentation for details).
 
-\textbf{Levels:} \texttt{White}, \texttt{Black}, \texttt{American Indian
-(Alaskan Native)}, \texttt{Asian}, \texttt{Hawaiian/Pacific Islander},
-\texttt{Other}
+  \textbf{Levels:} \texttt{White}, \texttt{Black}, \texttt{American
+    Indian (Alaskan Native)}, \texttt{Asian}, \texttt{Hawaiian/Pacific
+    Islander}, \texttt{Other}
 
-\item[\texttt{hisp}] Whether or not the individual is Hispanic. This is derived
-from the CPS variable \texttt{PEHSPNON}.
+\item[\texttt{hisp}] Whether or not the individual is Hispanic. This
+  is derived from the CPS variable \texttt{PEHSPNON}.
 
-\textbf{Levels:} \texttt{Hispanic}, \texttt{Non-Hispanic}
+  \textbf{Levels:} \texttt{Hispanic}, \texttt{Non-Hispanic}
 
-\item[\texttt{educ}] The individual's level of education. This is derived from
-the CPS variable \texttt{PEEDUCA}. The levels of this variable are less
-fine-grained than those of \texttt{PEEDUCA} (see the CPS documentation for
-details).
+\item[\texttt{educ}] The individual's level of education. This is
+  derived from the CPS variable \texttt{PEEDUCA}. The levels of this
+  variable are less fine-grained than those of \texttt{PEEDUCA} (see
+  the CPS documentation for details).
 
-\textbf{Levels:} \texttt{No high school}, \texttt{Completed high school},
-\texttt{Some college}, \texttt{Associate degree}, \texttt{Bachelor's degree},
-\texttt{Graduate degree}
+  \textbf{Levels:} \texttt{No high school}, \texttt{Completed high
+    school}, \texttt{Some college}, \texttt{Associate degree},
+  \texttt{Bachelor's degree}, \texttt{Graduate degree}
 
-\item[\texttt{citizen}] The individual's US citizenship status. This is derived
-from the CPS variable \texttt{PRCITSHP}. The levels of this variable are less
-fine-grained than those of \texttt{PRCITSHP} (see the CPS documentation for
-details).
+\item[\texttt{citizen}] The individual's US citizenship status. This
+  is derived from the CPS variable \texttt{PRCITSHP}. The levels of
+  this variable are less fine-grained than those of \texttt{PRCITSHP}
+  (see the CPS documentation for details).
 
-\textbf{Levels:} \texttt{US native}; \texttt{Foreign-born}, \texttt{citizen};
-\texttt{Foreign-born}, \texttt{non-citizen}
+  \textbf{Levels:} \texttt{US native}; \texttt{Foreign-born},
+  \texttt{citizen}; \texttt{Foreign-born}, \texttt{non-citizen}
 
-\item[\texttt{state}] The US state (including DC) where the individual resides.
-This is derived from the CPS variable \texttt{GESTFIPS}.
+\item[\texttt{state}] The US state (including DC) where the individual
+  resides. This is derived from the CPS variable \texttt{GESTFIPS}.
 
-\textbf{Levels:} (The two letter abbreviations for each of the 50 states,
-including DC)
+  \textbf{Levels:} (The two letter abbreviations for each of the 50
+  states, including DC)
 
-\item[\texttt{weight}] Statistical weight. Used to calculate union membership
-and union contract coverage proportions.
+\item[\texttt{weight}] Statistical weight. Used to calculate union
+  membership and union contract coverage proportions.
 
 \end{description}
+
+\section{Working with the tool}
+
+\subsection{Working with trends}
+
+\subsection{Working with maps}
 
 \end{document}

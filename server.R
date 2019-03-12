@@ -236,9 +236,14 @@ server <- function(input, output, session) {
   output$coverage_trend_data <- renderDataTable(coverage_trend_data())
   
   # Render the trend plot for union membership.
-  output$membership_trend_plot <- renderPlot(
+  output$membership_trend_plot <- renderPlot({
+    nurses_subset <- nurses_subset_selected()
+    validate(
+      need(nrow(nurses_subset) > 0, "No data selected.")
+    )
+    
     trend_plot(
-      nurses_subset = nurses_subset_selected(),
+      nurses_subset = nurses_subset,
       plot_type = input$trend_plot_type,
       group_var = input$trends_group_var,
       diff_var = input$trends_diff_var,
@@ -247,12 +252,17 @@ server <- function(input, output, session) {
       use_viridis = input$trends_use_viridis,
       type = "membership"
     )
-  )
+  })
   
   # Render the trend plot for union contract coverage.
-  output$coverage_trend_plot <- renderPlot(
+  output$coverage_trend_plot <- renderPlot({
+    nurses_subset <- nurses_subset_selected()
+    validate(
+      need(nrow(nurses_subset) > 0, "No data selected.")
+    )
+    
     trend_plot(
-      nurses_subset = nurses_subset_selected(),
+      nurses_subset = nurses_subset,
       plot_type = input$trend_plot_type,
       group_var = input$trends_group_var,
       diff_var = input$trends_diff_var,
@@ -261,7 +271,7 @@ server <- function(input, output, session) {
       use_viridis = input$trends_use_viridis,
       type = "coverage"
     )
-  )
+  })
   
   # Download the union membership trend data.
   output$membership_trend_download <- downloadHandler(
@@ -330,24 +340,34 @@ server <- function(input, output, session) {
   output$coverage_state_data <- renderDataTable(coverage_state_data())
   
   # Render the map showing union membership at the state-level.
-  output$membership_state_map <- renderPlot(
+  output$membership_state_map <- renderPlot({
+    nurses_subset <- nurses_subset_selected()
+    validate(
+      need(nrow(nurses_subset) > 0, "No data selected.")
+    )
+    
     state_map(
-      nurses_subset = nurses_subset_selected(),
+      nurses_subset = nurses_subset,
       selected_states_only = input$selected_states_only,
       fixed_scale = input$maps_fixed_scale,
       type = "membership"
     )
-  )
+  })
   
   # Render the map showing union contract coverage at the state-level.
-  output$coverage_state_map <- renderPlot(
+  output$coverage_state_map <- renderPlot({
+    nurses_subset <- nurses_subset_selected()
+    validate(
+      need(nrow(nurses_subset) > 0, "No data selected.")
+    )
+    
     state_map(
-      nurses_subset = nurses_subset_selected(),
+      nurses_subset = nurses_subset,
       selected_states_only = input$selected_states_only,
       fixed_scale = input$maps_fixed_scale,
       type = "coverage"
     )
-  )
+  })
   
   # Download the state-level union membership data.
   output$membership_state_download <- downloadHandler(

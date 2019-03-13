@@ -104,12 +104,12 @@
     "trends_use_viridis": false,
     "year_range": [
       2009,
-      2017
+      2018
     ]
   },
   "output": {
     "coverage_trend_plot": {
-      "src": "[image data sha1: 1c425602d0f56c9225fe94b911e9502f8eac5c48]",
+      "src": "[image data sha1: 13d122323dfb80a522d159bcf894f8e88147467e]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -126,8 +126,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0886363311193514,
               "top": 0.0225213908007139
             },
@@ -150,7 +150,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: 1e233607573c46c5e38cb289c6d06cfd25cd5519]",
+      "src": "[image data sha1: 1bd0c89ba8072e8aea1e8ab6400a7fcef9b23dbe]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -167,8 +167,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0886486690049857,
               "top": 0.00742145361255352
             },
@@ -192,10 +192,10 @@
     }
   },
   "export": {
-    "coverage_state_data": "128052cdaa62ac658ae3fa127a9d39f9",
-    "coverage_trend_data": "6782bf17211368611c1c46765a52bcfa",
-    "membership_state_data": "67aaabb9217fbe1ae0bc43f261e034b2",
-    "membership_trend_data": "072760faaa2c1152a4d6d22c8d30b50d",
-    "nurses_subset": "4079e203e81b6cfcfe5169e7813ecec2"
+    "coverage_state_data": "b193749f149f6ea48218005e4c0d90c6",
+    "coverage_trend_data": "8daa9b59a042bf1e68a34baf24bce330",
+    "membership_state_data": "528b4e3132b586d63c8a38b999b12aed",
+    "membership_trend_data": "0511dd53ea7328367a306dc506e38080",
+    "nurses_subset": "bead2a627cc2619cc4f6bc27938ad513"
   }
 }

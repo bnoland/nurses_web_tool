@@ -38,7 +38,7 @@
       "Female"
     ],
     "state_selection": "CA",
-    "tabs": "Geography",
+    "tabs": "States",
     "trend_plot_type": "grouped",
     "trends_diff_level1": "Male",
     "trends_diff_level1-selectized": "",
@@ -52,12 +52,12 @@
     "trends_use_viridis": false,
     "year_range": [
       2009,
-      2017
+      2018
     ]
   },
   "output": {
     "coverage_state_map": {
-      "src": "[image data sha1: 895e8cac014c85c4070c1565b25a4b8cd884bdcc]",
+      "src": "[image data sha1: 383f1c386b25d91a300b09e8a01a937ccf383490]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -86,8 +86,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -100,7 +100,7 @@
       }
     },
     "coverage_trend_plot": {
-      "src": "[image data sha1: 1f18b3434d79a89c66947a2de128560dc316893e]",
+      "src": "[image data sha1: a1db76b6e4dcdee6977e86bcc776e80a9dbacaf5]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -117,8 +117,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0248498696262337,
               "top": 0.521847262150907
             },
@@ -127,7 +127,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 36.1506849315069,
+              "left": 36.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -141,7 +141,7 @@
       }
     },
     "membership_state_map": {
-      "src": "[image data sha1: 17e3d3788d24e581f5c228f6ca5e73171297e148]",
+      "src": "[image data sha1: 73765fd1b7fb3d665f7f1fb8dab3a8e88600088e]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -170,8 +170,8 @@
               "fill": "map_df[, values]"
             },
             "range": {
-              "left": 9.83339768359031,
-              "right": 563.475444159498,
+              "left": 9.95180366117439,
+              "right": 563.593850137082,
               "bottom": 393.275217932752,
               "top": 4.48318804483188
             }
@@ -184,7 +184,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: a9d0feccca396eb47d3f027909d2c7b471679b70]",
+      "src": "[image data sha1: ba13ef5a6f80c94a96b559f47d6914d7ccebd3cd]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -201,8 +201,8 @@
               "y": null
             },
             "domain": {
-              "left": 2008.6,
-              "right": 2017.4,
+              "left": 2008.55,
+              "right": 2018.45,
               "bottom": -0.0233886785603276,
               "top": 0.491162249766879
             },
@@ -211,7 +211,7 @@
               "y": "prop"
             },
             "range": {
-              "left": 36.1506849315069,
+              "left": 36.1506849315068,
               "right": 625.520547945205,
               "bottom": 365.849315068493,
               "top": 5.47945205479452
@@ -226,10 +226,10 @@
     }
   },
   "export": {
-    "coverage_state_data": "333bd39fbdfdc5e8e224b5cfe24df326",
-    "coverage_trend_data": "8bca7a7e6c6363c66237ec9d21b2d24b",
-    "membership_state_data": "bc45d1008e528564e4da66325a0c70c9",
-    "membership_trend_data": "aa65c30cf72d8f9ce7529d12f8817ee3",
-    "nurses_subset": "56bc1f11ac28c79426145e3b9f3bcc5e"
+    "coverage_state_data": "bd4e2649d9e8fc2b86a81266d0c851cf",
+    "coverage_trend_data": "35ea8a912e9e831f55728cd4b72de515",
+    "membership_state_data": "413cc062aa9ccb46b8eca3b7e095c51d",
+    "membership_trend_data": "84eb77ba7f251fe9cb2240f232fe190e",
+    "nurses_subset": "f59423e42e81d4dc8f287f10c4334641"
   }
 }

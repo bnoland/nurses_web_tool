@@ -2,11 +2,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{enumitem}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{textcomp}
 
 \hypersetup{
   colorlinks=true,
   linkcolor=blue
 }
+
+\setenumerate{parsep=0em, listparindent=\parindent}
 
 \title{Documentation for the nurses web tool}
 \author{Benjamin Noland}
@@ -25,20 +29,20 @@ States. You can use the tool to generate trend plots and chloropleth
 maps showing how these quantities change over time, filtered and/or
 grouped according to a variety of demographics (detailed below). The
 tool uses data derived from the Current Population Survey (CPS) public
-use microdata. For background information on the CPS, see [ADD
-REFERENCE].
+use microdata. For background information on the CPS, see the official
+CPS website\footnote{\url{https://www.census.gov/programs-surveys/cps.html}}.
 
 \section{Details of the data}
 
 The tool operates on data derived from the Current Population Survey
-(CPS) public use microdata (see [ADD REFERENCE] for information on the
-raw CPS data).  Each entry in the data used by the tool corresponds to
-an individual interviewed as part of the CPS, and includes various
-demographic data on that individual, as well as flags indicating
-whether the individual is a union member or covered by a union
-contract. Each entry also includes the year in which the individual
-was interviewed, and a statistical weight used to calculate union
-membership and union contract coverage proportions.
+(CPS) public use microdata (see the official CPS website for
+information on the raw CPS data).  Each entry in the data used by the
+tool corresponds to an individual interviewed as part of the CPS, and
+includes various demographic data on that individual, as well as flags
+indicating whether the individual is a union member or covered by a
+union contract. Each entry also includes the year in which the
+individual was interviewed, and a statistical weight used to calculate
+union membership and union contract coverage proportions.
 
 The following are descriptions of the variables in the data used by
 the tool, including the possible values or levels that a particular
@@ -122,10 +126,10 @@ data if you desire to conduct more customized analysis.
 \subsection{Overview of the interface}
 
 When you first open the web tool, you are presented with the following
-interface.
-
-% TODO: Insert screenshot.
-
+interface:
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{images/opening_interface.png}
+\end{center}
 The various components of the interface are described in the next few
 subsections.
 
@@ -170,9 +174,9 @@ below.
 
 If you select the Trends tab, you will be presented with the following
 interface:
-
-% TODO: Insert screenshot
-
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{images/trends_interface.png}
+\end{center}
 This interface allows you to explore trends in union membership and
 union contract coverage. There are three sub-tabs: Plots, for viewing
 the trend plots; Data, for viewing the data used to construct the
@@ -186,7 +190,65 @@ To illustrate typical usage, we will work through several examples.
   female nurses in the west coast states (California, Oregon, and
   Washington).
 
-  % TODO
+  First, select Trends \textrightarrow{} Plots to access the interface
+  for viewing trend plots.
+
+  Next we need to select the subset of data we want to work with. In
+  this case, we want to examine black, female nurses in California,
+  Oregon, and Washington. We can accomplish this using the filtering
+  tools at the left side of the page. Click on the drop down menu
+  labeled Sex in the filtering tools. You should see something like
+  the following:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex1/sex_selection.png}
+  \end{center}
+  We only want to examine female nurses, so uncheck the checkbox
+  labeled Male. Restricting our attention to black nurses is similar:
+  select the Race tab from the filtering tools and uncheck every
+  checkbox except for the one labeled Black.
+
+  Selecting our states of interest is a little different. Select the
+  States tab from the filtering tools. You should see something like
+  the following:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex1/state_selection.png}
+  \end{center}
+  Clicking on the drop down menu allows you to select your states of
+  choice:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex1/state_drop_down.png}
+  \end{center}
+  In this case, we want to select California, Oregon, and Washington
+  (labeled CA, OR, and WA, respectively, in the drop down menu
+  above). The easiest way to do this is to click Deselect All to
+  remove all states from the selection, and then to select CA, OR, and
+  WA from the drop down menu. Do this now.
+
+  Note that you can hide a tab in the filtering tools by clicking on
+  the tab again (just as you did to open the tab). Doing this, we end
+  up with the following:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex1/final_interface.png}
+  \end{center}
+  Specifically, we end up with two trend plots: one showing union
+  membership over time, and one showing union contract coverage over
+  time:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex1/membership_trend.png}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex1/coverage_trend.png}
+  \end{center}
+  You can save either of these plots by right-clicking it and
+  selecting the copy option from the drop-down menu, as you would with
+  any other image on a webpage.
+
+  Note that you can view the data used to generate the two trend plots
+  by selecting Trends \textrightarrow{} Data. Doing this, you should
+  see the following interface, which allows you to examine the data
+  and download it in CSV format if you decide to perform custom
+  analysis:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex1/data_interface.png}
+  \end{center}
 
 \item For our second example, we will create trend plots showing the
   difference in union membership and the difference in union contract
@@ -210,7 +272,9 @@ To illustrate typical usage, we will work through several examples.
 If you select the States tab, you will be presented with the following
 interface:
 
-% TODO: Insert screenshot
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{images/states_interface.png}
+\end{center}
 
 This interface allows you to create chloropleth maps displaying union
 membership and union contract coverage per state over the years
@@ -233,5 +297,14 @@ To illustrate typical usage, we will work through several examples.
 \end{enumerate}
 
 \subsection{Examining the data selection}
+
+If you select the Data tab, you will be presented with the following
+interface:
+
+\begin{center}
+  \includegraphics[width=0.7\textwidth]{images/data_interface.png}
+\end{center}
+
+% TODO
 
 \end{document}

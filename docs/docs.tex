@@ -230,9 +230,8 @@ To illustrate typical usage, we will work through several examples.
   \begin{center}
     \includegraphics[width=0.7\textwidth]{images/trends_ex1/final_interface.png}
   \end{center}
-  Specifically, we end up with two trend plots: one showing union
-  membership over time, and one showing union contract coverage over
-  time:
+  We now have two trend plots: one showing union membership over time,
+  and one showing union contract coverage over time:
   \begin{center}
     \includegraphics[width=0.49\linewidth]{images/trends_ex1/membership_trend.png}
     \includegraphics[width=0.49\linewidth]{images/trends_ex1/coverage_trend.png}
@@ -255,13 +254,61 @@ To illustrate typical usage, we will work through several examples.
   coverage among nurses in the age group 25-54 and nurses in the age
   group 55 and over.
 
-  % TODO
+  As in the previous example, go to Trends \textrightarrow{} Plots if
+  you have not already.
+
+  Next we want to select the subset of data we want to work with. In
+  this case, we want to restrict our attention to nurses in the age
+  group 25-54 and those in the age group 55 and over. To do this,
+  select the Age group tab in the filtering tools at the left of the
+  page. Make sure the right age groups are selected. Specifically, the
+  selection should look as follows:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex2/age_selection.png}
+  \end{center}
+  Right now our two trend plots display union membership and union
+  contract coverage for nurses aged 25-54 and nurses aged 55 and over
+  \emph{combined}. We want our plots to display the \emph{difference}
+  between these two age groups. To do this, go to Trends
+  \textrightarrow{} Options. You should see the following interface:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex2/options_interface.png}
+  \end{center}
+  We want to take a look at the options for creating difference plots:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex2/options_diff_plots.png}
+  \end{center}
+  These options may be currently disabled. Under the General options
+  section, make sure the plot type is set to Difference plot:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex2/options_plot_type.png}
+  \end{center}
+  Next, go back to the difference plot options. Under the drop down
+  menu labeled Variable, select Age group, and under the drop down
+  menus labeled First and Second, select 25-54 and 55 and over,
+  respectively. The options should now look like the following:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex2/options_diff_plots2.png}
+  \end{center}
+  Now go back to Trends \textrightarrow{} Plots. We get the following
+  two trend plots displaying the \emph{difference} in union membership
+  and union contract coverage, respectively, between nurses aged 25-54
+  and those aged 55 and over:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex2/membership_trend.png}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex2/coverage_trend.png}
+  \end{center}
+  As in the previous example, you can view and download the data used
+  to generate these plots under Trends \textrightarrow{} Data:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex2/data_interface.png}
+  \end{center}
 
 \item In our third and final example we will create trend plots
-  showing the difference in union membership and the difference in
-  union contract coverage among nurses in the tri-state area (New
-  York, New Jersey, and Pennsylvania) who are US native, foreign-born
-  citizens, and foreign-born non-citizens.
+  comparing both union membership and union contract coverage among
+  nurses in the tri-state area (New York, New Jersey, and
+  Pennsylvania) who are US native, foreign-born citizens, and
+  foreign-born non-citizens.
 
   % TODO
 

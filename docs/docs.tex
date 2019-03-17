@@ -298,6 +298,7 @@ To illustrate typical usage, we will work through several examples.
     \includegraphics[width=0.49\linewidth]{images/trends_ex2/membership_trend.png}
     \includegraphics[width=0.49\linewidth]{images/trends_ex2/coverage_trend.png}
   \end{center}
+
   As in the previous example, you can view and download the data used
   to generate these plots under Trends \textrightarrow{} Data:
   \begin{center}
@@ -308,9 +309,81 @@ To illustrate typical usage, we will work through several examples.
   comparing both union membership and union contract coverage among
   nurses in the tri-state area (New York, New Jersey, and
   Pennsylvania) who are US native, foreign-born citizens, and
-  foreign-born non-citizens.
+  foreign-born non-citizens, from the year 2010 to 2016.
 
-  % TODO
+  As before, start by going to Trends \textrightarrow{} Plots.
+
+  We want to restrict our attention to nurses in New York, New Jersey,
+  and Pennsylvania (labeled NY, NJ, and PA, respectively in the
+  filtering tools). As in the previous example, select the States tab
+  in the filtering tools, click Deselect All, and then select NY, NJ,
+  and PA from the drop down menu. After closing the menu, the state
+  selection should look as follows:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex3/state_selection.png}
+  \end{center}
+  Next, we want to restrict our attention to the years 2010 through
+  2016. In the filtering tools, click on the Year range tab. This will
+  reveal a slide bar allowing you to select a year range:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex3/year_selection.png}
+  \end{center}
+  Slide the knobs at the end of the slide bar in order to select the
+  range 2010 to 2016:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/trends_ex3/year_selection2.png}
+  \end{center}
+  Notice how the horizontal axis on each of the trend plots has
+  changed to reflect this year selection.
+
+  Now that we have our data selected, it is time to turn to the trend
+  plots themselves. Each of the trend plots currently displays only a
+  single line showing union membership and union contract coverage,
+  respectively, among \emph{all} nurses in our selection. We want to
+  be able to compare these two quantities among three groups of
+  nurses: those who are US natives, those who are foreign-born
+  citizens, and those who are foreign-born non-citizens. We can
+  accomplish this by having the trend plots display a separate line
+  showing union membership and union contract coverage, respectively,
+  for each of these groups. Doing this is straightforward. Go to
+  Trends \textrightarrow{} Options. We want to work with the options
+  for grouped plots:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex3/grouped_plot_options.png}
+  \end{center}
+  In the drop down menu labeled Group by, select Citizenship status:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex3/grouped_plot_options2.png}
+  \end{center}
+  Now go back to Trends \textrightarrow{} Plots. Each of the trend
+  plots should now have a separate line corresponding to each level of
+  the Citizenship status variable, as we wanted:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex3/membership_trend.png}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex3/coverage_trend.png}
+  \end{center}
+  The default color palette used to distinguish the groups may be
+  difficult to distinguish for people with various forms of
+  color-blindness, however. The
+  viridis\footnote{\url{https://bit.ly/2n7D6tF}} color palette is a
+  more robust alternative. To use it, go to Trends \textrightarrow{}
+  Options and under General options, choose to use the viridis color
+  palette:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex3/viridis_options.png}
+  \end{center}
+  Now go back to Trends \textrightarrow{} Plots. Each plot will now
+  use the viridis palette to distinguish the groups:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex3/membership_trend2.png}
+    \includegraphics[width=0.49\linewidth]{images/trends_ex3/coverage_trend2.png}
+  \end{center}
+
+  As in the previous examples, you can go to Trends \textrightarrow{}
+  Data to view and download the data used to generate the plots:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/trends_ex3/data_interface.png}
+  \end{center}
 
 \end{enumerate}
 

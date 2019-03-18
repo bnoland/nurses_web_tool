@@ -170,7 +170,7 @@ can modify the data selection using the filtering tools at the left
 side of the page. The features of this tab are described in detail
 below.
 
-\subsection{Working with trends}
+\subsection{Working with trends} \label{working_with_trends}
 
 If you select the Trends tab, you will be presented with the following
 interface:
@@ -410,9 +410,74 @@ To illustrate typical usage, we will work through several examples.
   in the west coast states (California, Oregon, and Washington), over
   the years 2010 to 2015.
 
+  First, select States \textrightarrow{} Maps to access the interface
+  for viewing chloropleth maps.
+
+  Next we need to select the subset of the data we are interested
+  in. In this case, we want to restrict attention to Hispanic nurses
+  in California, Oregon, and Washington over the years 2010 to
+  2015. First, let us restrict ourselves to Hispanic nurses. To do
+  this, click on the Hispanic status tab in the filtering tools. Make
+  sure the checkbox labeled Hispanic is checked and the checkbox
+  labeled Non-Hispanic is unchecked:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/maps_ex1/hisp_selection.png}
+  \end{center}
+  To restrict ourselves to nurses in California, Oregon, and
+  Washington, click on the States tab in the filtering tools and make
+  sure that only CA, OR, and WA are selected (for details on how to do
+  this, see the first example in section
+  \ref{working_with_trends}). After doing this, the selection listed
+  under the States tab should look as follows:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/maps_ex1/state_selection.png}
+  \end{center}
+  Finally, we need to restrict attention to the years 2010 to 2015. To
+  do this, click on the Year range tab in the filtering tools and
+  slide the knobs on the slide bar to cover the year range 2010 to
+  2015 (for more details, see the third example in section
+  \ref{working_with_trends}). After doing this, the slide bar should
+  look as follows:
+  \begin{center}
+    \includegraphics[width=0.3\textwidth]{images/maps_ex1/year_selection.png}
+  \end{center}
+
+  We end up with the following two chloropleth maps for statewise
+  union membership and union contract coverage, respectively:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/maps_ex1/membership_map.png}
+    \includegraphics[width=0.49\linewidth]{images/maps_ex1/coverage_map.png}
+  \end{center}
+  The states shaded in gray have no data associated with
+  them. Unsurprisingly, every state excluding California, Oregon, and
+  Washington (the ones we selected) is shaded in gray. As such, it is
+  probably desirable to only display the states we selected. To do
+  this, go to States \textrightarrow{} Options and make sure the
+  option to show only the selected states is checked:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/maps_ex1/selected_states_option.png}
+  \end{center}
+  Now go back to States \textrightarrow{} Maps. Our chloropleth maps
+  now display only our states of interest:
+  \begin{center}
+    \includegraphics[width=0.49\linewidth]{images/maps_ex1/membership_map2.png}
+    \includegraphics[width=0.49\linewidth]{images/maps_ex1/coverage_map2.png}
+  \end{center}
+
+  Note that you can view the data used to generate the two chloropleth
+  maps by selecting States \textrightarrow{} Data. Doing this, you
+  should see the following interface, which allows you to examine the
+  data and download it in CSV format if you decide to perform custom
+  analysis:
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/maps_ex1/data_interface.png}
+  \end{center}
+  
 \item For our second example, we will create a chloropleth map showing
   union membership and contract coverage among all nurses in all
   states in the year 2011.
+
+  % TODO
 
 \end{enumerate}
 

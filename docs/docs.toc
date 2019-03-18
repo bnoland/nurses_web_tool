@@ -8,4 +8,4 @@
 \contentsline {subsubsection}{\numberline {3.1.4}The Data tab}{5}{subsubsection.3.1.4}
 \contentsline {subsection}{\numberline {3.2}Working with trends}{5}{subsection.3.2}
 \contentsline {subsection}{\numberline {3.3}Working with maps}{14}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Examining the data selection}{15}{subsection.3.4}
+\contentsline {subsection}{\numberline {3.4}Examining the data selection}{18}{subsection.3.4}

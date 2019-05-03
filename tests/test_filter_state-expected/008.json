@@ -103,7 +103,7 @@
       }
     },
     "coverage_trend_plot": {
-      "src": "[image data sha1: 5ae132d60e912c17143a0a2626ed759c408f4e72]",
+      "src": "[image data sha1: a0931634d10c822ba4c2834050258bdf7092d218]",
       "width": 631,
       "height": 400,
       "coordmap": {
@@ -187,7 +187,7 @@
       }
     },
     "membership_trend_plot": {
-      "src": "[image data sha1: df230ef00d3a3f179059f08ab627d9f09bafc4be]",
+      "src": "[image data sha1: d4a2589349d0546d221d3d966164890c9a356952]",
       "width": 631,
       "height": 400,
       "coordmap": {

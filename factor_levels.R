@@ -16,7 +16,6 @@ age_group_factor_levels <- function() {
   )
 }
 
-# TODO: Right factor levels?
 race_factor_levels <- function() {
   c(
     "White",
